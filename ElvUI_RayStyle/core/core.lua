@@ -9,14 +9,6 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 local format = string.format
 
--- Change priest color to be light blue. White is boring.
-E.PriestColors = {
-	r = 0,
-	g = 179/255,
-	b = 1,
-	colorStr = "00b3ff",
-}
-
 RS["media"] = {}
 
 local ItemUpgrade = setmetatable ({

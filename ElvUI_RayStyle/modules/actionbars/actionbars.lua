@@ -1,8 +1,13 @@
+--[[------------------------------------------------------------
+--	RayStyle, an ElvUI edit by Ray
+--
+--	This file contains initialization code for RayStyle
+------------------------------------------------------------]]--
 local E, L, V, P, G, _ = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 local AB = E:GetModule("ActionBars")
 local RS = E:GetModule("RayStyle")
 
-local function StyleButton(self, button)
+local function StyleActionButton(button)
 	if button.backdrop then
 		button.backdrop:Hide()
 		button.backdrop = nil
@@ -10,4 +15,9 @@ local function StyleButton(self, button)
 		button.backdrop:SetAllPoints()
 	end
 end
-hooksecurefunc(AB, "StyleButton", StyleButton)
+
+function RS:StyleActionButton(button)
+	StyleActionButton(button)
+end
+
+hooksecurefunc(AB, "StyleButton", RS.StyleActionButton)

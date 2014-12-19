@@ -1,5 +1,11 @@
+--[[------------------------------------------------------------
+--	RayStyle, an ElvUI edit by Ray
+--
+--	This file contains initialization code for RayStyle
+------------------------------------------------------------]]--
 local E, L, V, P, G, _ = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 local RW = E:NewModule("Watcher", "AceEvent-3.0")
+local LSM = LibStub("LibSharedMedia-3.0")
 
 local colors = CUSTOM_CLASS_COLORS
 RW.modules = {}
@@ -95,7 +101,7 @@ function watcherPrototype:CreateButton(mode)
 		button.statusbar:CreateShadow("Background")
 		button.statusbar:SetWidth(self.barwidth - 6)
 		button.statusbar:SetHeight(5)
-		button.statusbar:SetStatusBarTexture(R["media"].normal)
+		button.statusbar:SetStatusBarTexture(E["media"].normTex)
 		button.statusbar:SetStatusBarColor(colors[E.myclass].r, colors[E.myclass].g, colors[E.myclass].b, 1)
 		if ( self.iconside == "RIGHT" ) then
 			button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 0)
@@ -111,11 +117,11 @@ function watcherPrototype:CreateButton(mode)
 		spark:SetPoint("TOPLEFT", button.statusbar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
 		spark:SetPoint("BOTTOMRIGHT", button.statusbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
 		button.time = button:CreateFontString(nil, "OVERLAY")
-		button.time:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+		button.time:FontTemplate(nil, 12, "OUTLINE")
 		button.time:SetPoint("BOTTOMRIGHT", button.statusbar, "TOPRIGHT", 0, 2)
 		button.time:SetText("60")
 		button.name = button:CreateFontString(nil, "OVERLAY")
-		button.name:SetFont(R["media"].font, R["media"].fontsize, R["media"].fontflag)
+		button.name:FontTemplate(nil, 12, "OUTLINE")
 		button.name:SetPoint("BOTTOMLEFT", button.statusbar, "TOPLEFT", 0, 2)
 		button.name:SetText("技能名称")
 		button.mode = "BAR"
@@ -131,12 +137,12 @@ function watcherPrototype:CreateButton(mode)
 	textFrame:SetAllPoints()
 	textFrame:SetFrameLevel(button:GetFrameLevel() + 1)
 	button.count = textFrame:CreateFontString(nil, "OVERLAY")
-	button.count:FontTemplate(nil, nil, "OUTLINE")
+	button.count:FontTemplate(nil, 12 * (E:Round(self.size) / 30), "OUTLINE")
 	button.count:SetPoint("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -4)
 	button.count:SetJustifyH("RIGHT")
 
 	button.value = textFrame:CreateFontString(nil, "OVERLAY")
-	button.value:FontTemplate(nil, nil, "OUTLINE")
+	button.value:FontTemplate(nil, 9 * (E:Round(self.size) / 30), "OUTLINE")
 	button.value:SetPoint("CENTER", button , "TOP", 0, 1)
 	button.value:SetJustifyH("RIGHT")
 

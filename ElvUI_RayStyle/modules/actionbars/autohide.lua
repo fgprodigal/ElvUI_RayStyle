@@ -4,6 +4,7 @@ local RS = E:GetModule("RayStyle")
 local AH = RS:NewModule("AutoHide", "AceEvent-3.0", "AceHook-3.0")
 
 local hider = CreateFrame("Frame", "ActionBarHider", UIParent)
+hider:Hide()
 RegisterStateDriver(hider, "visibility", "[combat][@target,exists][vehicleui]show")
 
 local function pending()
@@ -56,6 +57,22 @@ function AH:OnAutoHideEvent(event, addon)
 	end
 end
 
+local function FixActionButtonCooldown(button)
+	if not button then return end
+	if not button.cooldown then return end
+	local name = button:GetName()
+	local cooldown = button.cooldown
+	local start, duration, enable, charges, maxCharges
+	if button.GetCooldown then
+		start, duration, enable, charges, maxCharges = button:GetCooldown()
+	elseif button.action and button.action > 0 then
+		start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
+	end
+	if start then
+		CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
+	end
+end
+
 function AH:EnableAutoHide()
 	AH:RegisterEvent("PLAYER_REGEN_ENABLED", "OnAutoHideEvent")
 	AH:RegisterEvent("PLAYER_REGEN_DISABLED", "OnAutoHideEvent")
@@ -79,6 +96,16 @@ function AH:EnableAutoHide()
 			_G["ElvUI_Bar"..i]:SetParent(ActionBarHider)
 		end
 	end
+	
+	hooksecurefunc(ActionBarHider, "Show", function(self,alpha)
+		for button in pairs(AB["handledbuttons"]) do
+			if button then
+				FixActionButtonCooldown(button)
+			else
+				AB["handledbuttons"][button] = nil
+			end
+		end
+	end)
 end
 
 hooksecurefunc(AB, "Initialize", AH.EnableAutoHide)

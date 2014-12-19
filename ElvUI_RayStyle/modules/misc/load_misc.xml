@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='announce.lua'/>
+	<Script file='auction.lua'/>
+	<Script file='focuser.lua'/>
+	<Script file='misc.lua'/>
+	<Script file='quests.lua'/>
+</Ui>

@@ -9,6 +9,10 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local RS = E:GetModule("RayStyle")
 
 P["RS"] = {	
+	["general"] = {
+		["cdFont"] = "RayStyle RoadWay",
+	},
+
 	["actionbar"] = {		
 		["bar1"] = {
 			["autohide"] = true,
@@ -31,5 +35,12 @@ P["RS"] = {
 				["right"] = "Guild",
 			},
 		},
-	}
+	},
+	
+	["misc"]={
+		["anounce"] = true,
+		["auction"] = true,
+		["quest"] = true,
+		["automation"] = true,
+	},
 }

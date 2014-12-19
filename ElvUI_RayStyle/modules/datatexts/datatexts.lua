@@ -41,12 +41,12 @@ local function DatatextOptions()
 	E.Options.args.RS.args.config.args.datatexts = {
 		order = 1,
 		type = "group",
-		name = L["Datatexts"],
+		name = L["DataTexts"],
 		args = {
 			header = {
 				order = 1,
 				type = "header",
-				name = RS:ColorStr(L["Datatexts"]),
+				name = RS:ColorStr(L["DataTexts"]),
 			},
 			panels = {
 				order = 3,

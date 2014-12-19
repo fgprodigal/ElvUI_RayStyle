@@ -17,7 +17,7 @@ local RS = E:GetModule("RayStyle")
 local format = string.format
 
 local CURRENT_PAGE = 0
-local MAX_PAGE = 7
+local MAX_PAGE = 6
 
 local function SetupChat()
 	RayStyleInstallStepComplete.message = L["Chat Set"]
@@ -96,52 +96,58 @@ local function SetupChat()
 end
 
 local function SetupCVars()
-	-- SetCVar("scriptErrors", 1)
-	-- SetCVar("buffDurations", 1)
-	-- SetCVar("consolidateBuffs", 0)
-	-- SetCVar("lootUnderMouse", 1)
-	-- SetCVar("autoSelfCast", 1)
-	-- SetCVar("nameplateShowFriends", 0)
-	-- SetCVar("nameplateShowFriendlyPets", 0)
-	-- SetCVar("nameplateShowFriendlyGuardians", 0)
-	-- SetCVar("nameplateShowFriendlyTotems", 0)
-	-- SetCVar("nameplateShowEnemies", 1)
-	-- SetCVar("nameplateShowEnemyPets", 1)
-	-- SetCVar("cameraDistanceMax", 50)
-	-- SetCVar("cameraDistanceMaxFactor", 4)
-	-- SetCVar("autoDismountFlying", 1)
-	-- SetCVar("autoQuestWatch", 1)
-	-- SetCVar("autoQuestProgress", 1)
-	-- SetCVar("guildMemberNotify", 0)
-	-- SetCVar("removeChatDelay", 1)
-	-- SetCVar("showVKeyCastbar", 1)
-	-- SetCVar("colorblindMode", 0)
-	-- SetCVar("autoLootDefault", 1)
-	-- SetCVar("bloatthreat", 0)
-	-- SetCVar("bloattest", 0)
-	-- SetCVar("bloatnameplates", 0)
-	-- SetCVar("showTimestamps", "%H:%M:%S ")
-	-- SetCVar("deselectOnClick", 1)
-	-- SetCVar("UnitNameFriendlyGuardianName", 1)
-	-- SetCVar("UnitNameOwn", 1)
-	-- SetCVar("UnitNameGuildTitle", 0)
-	-- SetCVar("ActionButtonUseKeyDown", 0)
-	-- SetCVar("interactOnLeftClick", 0)
+	SetCVar("scriptErrors", 0)
+	SetCVar("buffDurations", 1)
+	SetCVar("consolidateBuffs", 0)
+	SetCVar("lootUnderMouse", 1)
+	SetCVar("autoSelfCast", 1)
+	SetCVar("nameplateShowFriends", 0)
+	SetCVar("nameplateShowFriendlyPets", 0)
+	SetCVar("nameplateShowFriendlyGuardians", 0)
+	SetCVar("nameplateShowFriendlyTotems", 0)
+	SetCVar("nameplateShowEnemies", 1)
+	SetCVar("nameplateShowEnemyPets", 1)
+	SetCVar("cameraDistanceMax", 50)
+	SetCVar("cameraDistanceMaxFactor", 4)
+	SetCVar("autoDismountFlying", 1)
+	SetCVar("autoQuestWatch", 1)
+	SetCVar("autoQuestProgress", 1)
+	SetCVar("guildMemberNotify", 0)
+	SetCVar("removeChatDelay", 1)
+	SetCVar("showVKeyCastbar", 1)
+	SetCVar("colorblindMode", 0)
+	SetCVar("autoLootDefault", 1)
+	SetCVar("deselectOnClick", 1)
+	SetCVar("UnitNameFriendlyGuardianName", 1)
+	SetCVar("UnitNameGuildTitle", 1)
+	SetCVar("ActionButtonUseKeyDown", 1)
+	SetCVar("interactOnLeftClick", 0)
 		
 	RayStyleInstallStepComplete.message = L["CVars Set"]
 	RayStyleInstallStepComplete:Show()
 end
 
 function RS:SetupLayout(layout, noDataReset)
-	local classColor = E.myclass == "PRIEST" and E.PriestColors or RAID_CLASS_COLORS[E.myclass]
-
 	--Set up various settings shared across all layouts
 	if not noDataReset then
+		--private
+		E.private.general.pixelPerfect = true
+		E.private.general.lootRoll = true
+		E.private.general.normTex = "RayStyle Normal"
+		E.private.general.glossTex = "RayStyle Gloss"
+		E.private.general.namefont = "RayStyle Font"
+		E.private.general.dmgfont = "RayStyle Combat"
+
 		--general
 		E.db.general.bordercolor = { r = 0,g = 0,b = 0 }
 		E.db.general.backdropcolor = { r = 0.1,g = 0.1,b = 0.1 }
 		E.db.general.backdropfadecolor = { r = .04,g = .04,b = .04, a = 0.7 }
 		E.db.general.bottomPanel = false
+		E.db.general.autoRepair = "GUILD"
+		E.db.general.autoRoll = true
+		E.db.general.vendorGrays = true
+		E.db.general.autoAcceptInvite = true
+		E.db.general.interruptAnnounce = "NONE"
 		
 		--chat
 		E.db.chat.font = "RayStyle Font"
@@ -149,7 +155,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.chat.panelTabTransparency = false
 		E.db.chat.editBoxPosition = "ABOVE_CHAT"
 		E.db.chat.tabFont = "RayStyle Font"
-		E.db.chat.tabFontSize = 12
+		E.db.chat.timeStampFormat = "%H:%M "
 		
 		--nameplate
 		E.db.nameplate.font = "RayStyle Font"
@@ -182,6 +188,51 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.colors.castColor = { r = 0.2,g = 1,b = 0.2 }
 		E.db.unitframe.colors.castNoInterrupt = { r = 1, g = 0.2, b = 0.2 }
 		E.db.unitframe.colors.health = { r = .12,g = .12,b = .12 }
+		E.db.unitframe.colors.power.MANA = { r = 0,g = .82,b = 1 }
+		E.db.unitframe.colors.power.RUNIC_POWER = { r = 0,g = .82,b = 1 }
+		E.db.unitframe.colors.power.RAGE = { r = 1,g = 0,b = 0 }
+		E.db.unitframe.colors.power.FOCUS = { r = 1,g = .5,b = .25 }
+		E.db.unitframe.colors.power.ENERGY = { r = 1,g = 1,b = 0 }
+		E.db.unitframe.colors.classResources.DEATHKNIGHT = {
+			[1] = {r = 1, g = 0, b = 0},
+			[2] = {r = 0, g = 0.5, b = 0},
+			[3] = {r = 0, g = 1, b = 1},
+			[4] = {r = .9, g = .1, b = 1},	
+		}
+		E.db.unitframe.colors.classResources.PALADIN = {r = 1,g = 0.42,b = 0.62}
+		E.db.unitframe.colors.classResources.MAGE = {r = 0.2,g = 0.76,b = 1}
+		E.db.unitframe.colors.classResources.PRIEST = {r = 1,g = 1,b = 1}
+		E.db.unitframe.colors.classResources.DRUID = {
+			[1] = {r = 0, g = .4, b = 1},
+			[2] = {r = 1, g = .6,  b = 0},
+		}
+		E.db.unitframe.colors.classResources.MONK = {
+			[1] = { r = 0,	g = 1,	b = 0.59},
+			[2] = { r = 0,	g = 1,	b = 0.59},
+			[3] = { r = 0,	g = 1,	b = 0.59},
+			[4] = { r = 0,	g = 1,	b = 0.59},
+			[5] = { r = 0,	g = 1,	b = 0.59},
+			[6] = { r = 0,	g = 1,	b = 0.59},
+		}
+		E.db.unitframe.colors.classResources.ROGUE = {
+			[1] = { r = 1,	g = 0,	b = 0},
+			[2] = { r = 1,	g = 0,	b = 0},
+			[3] = { r = 1,	g = 1,	b = 0},
+			[4] = { r = 1,	g = 1,	b = 0},
+			[5] = { r = 0,	g = 1,	b = 0},
+		}
+		E.db.unitframe.colors.classResources.comboPoints = {
+			[1] = { r = 1,	g = 0,	b = 0},
+			[2] = { r = 1,	g = 0,	b = 0},
+			[3] = { r = 1,	g = 1,	b = 0},
+			[4] = { r = 1,	g = 1,	b = 0},
+			[5] = { r = 0,	g = 1,	b = 0},
+		}
+		E.db.unitframe.colors.reaction = {
+			["BAD"] = { r = 1, g = 0.2, b = 0.2 },
+			["NEUTRAL"] = { r = 1, g = 1, b = 0.2 },
+			["GOOD"] = { r = 0.2, g = 1, b = 0.2 },
+		}
 		E.db.unitframe.units.player.width = 220
 		E.db.unitframe.units.player.height = 32
 		E.db.unitframe.units.player.portrait.enable = true
@@ -195,6 +246,8 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.player.debuffs.anchorPoint = "TOPRIGHT"
 		E.db.unitframe.units.player.debuffs.perrow = 10
 		E.db.unitframe.units.player.debuffs.attachTo = "FRAME"
+		E.db.unitframe.units.player.debuffs.yOffset = 7
+		E.db.unitframe.units.player.classbar.height = 7
 		E.db.unitframe.units.target.width = 220
 		E.db.unitframe.units.target.height = 32
 		E.db.unitframe.units.target.portrait.enable = true
@@ -209,10 +262,23 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.target.buffs.anchorPoint = "BOTTOMLEFT"
 		E.db.unitframe.units.target.buffs.perrow = 10
 		E.db.unitframe.units.target.buffs.attachTo = "FRAME"
+		E.db.unitframe.units.target.combobar.height = 7
+		E.db.unitframe.units.target.combobar.detachFromFrame = true
+		E.db.unitframe.units.target.combobar.detachedWidth = 220
 		E.db.unitframe.units.targettarget.height = 32
 		E.db.unitframe.units.targettarget.power.height = 3
 		E.db.unitframe.units.targettarget.debuffs.anchorPoint = "TOPLEFT"
 		E.db.unitframe.units.targettarget.debuffs.attachTo = "FRAME"
+		E.db.unitframe.units.tank.enable = false
+		E.db.unitframe.units.assist.enable = false
+		E.db.unitframe.units.raid.enable = true
+		E.db.unitframe.units.raid.growthDirection = "RIGHT_UP"
+		E.db.unitframe.units.raid.height = 40
+		E.db.unitframe.units.raid.power.height = 3
+		E.db.unitframe.units.raid40.enable = true
+		E.db.unitframe.units.raid40.growthDirection = "RIGHT_UP"
+		E.db.unitframe.units.raid40.power.enable = true
+		E.db.unitframe.units.raid40.power.height = 3
 
 		--actionbar
 		E.db.actionbar.font = "RayStyle Font"
@@ -222,12 +288,15 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.actionbar.bar1.enabled = true
 		E.db.actionbar.bar1.buttonsize = 28
 		E.db.actionbar.bar1.buttons = 12
+		E.db.actionbar.bar1.buttonsPerRow = 12
 		E.db.actionbar.bar2.enabled = true
 		E.db.actionbar.bar2.buttonsize = 28
 		E.db.actionbar.bar2.buttons = 12
+		E.db.actionbar.bar2.buttonsPerRow = 12
 		E.db.actionbar.bar3.enabled = true
 		E.db.actionbar.bar3.buttonsize = 28
 		E.db.actionbar.bar3.buttons = 12
+		E.db.actionbar.bar3.buttonsPerRow = 6
 		E.db.actionbar.bar3.point = "TOPLEFT"
 		E.db.actionbar.bar4.enabled = true
 		E.db.actionbar.bar4.mouseover = true
@@ -253,7 +322,7 @@ function RS:SetupLayout(layout, noDataReset)
 
 		--datatexts
 		E.db.datatexts.font = "RayStyle Font"
-		E.db.datatexts.fontSize = 10
+		E.db.datatexts.fontSize = 11
 		E.db.datatexts.fontOutline = "NONE"
 		E.db.datatexts.time24 = true
 		E.db.datatexts.panels.LeftChatDataPanel.left = "System"
@@ -263,13 +332,17 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.datatexts.panels.RightChatDataPanel.middle = "Bags"
 		E.db.datatexts.panels.LeftMiniPanel = "Time"
 		E.db.datatexts.panels.RightMiniPanel = "Combat/Arena Time"
+		E.db.datatexts.goldCoins = true
 
 		RS:SetMoverPosition("ElvUF_PlayerMover", "BOTTOMRIGHT", E.UIParent, "BOTTOM", -80, 390)
 		RS:SetMoverPosition("ElvUF_PlayerCastbarMover", "BOTTOM", E.UIParent, "BOTTOM", 0, 305)
+		RS:SetMoverPosition("ComboBarMover", "BOTTOMLEFT", ElvUF_Player, "TOPLEFT", 1, 0)
 		RS:SetMoverPosition("ElvUF_TargetMover", "BOTTOMLEFT", E.UIParent, "BOTTOM", 80, 390)
 		RS:SetMoverPosition("ElvUF_TargetCastbarMover", "TOP", ElvUF_Target, "BOTTOM", 0, -22)
 		RS:SetMoverPosition("ElvUF_TargetTargetMover", "LEFT", ElvUF_Target, "RIGHT", 10, 0)
 		RS:SetMoverPosition("ElvUF_FocusMover", "BOTTOMRIGHT", ElvUF_Player, "TOPLEFT", -20, 20)
+		RS:SetMoverPosition("ElvUF_RaidMover", "BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 215)
+		RS:SetMoverPosition("ElvUF_Raid40Mover", "BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 215)
 		RS:SetMoverPosition("ElvAB_1", "BOTTOM", E.UIParent, "BOTTOM", -90, 235)
 		RS:SetMoverPosition("ElvAB_2", "BOTTOM", ElvAB_1, "TOP", 0, -2)
 		RS:SetMoverPosition("ElvAB_3", "BOTTOMLEFT", ElvAB_1, "BOTTOMRIGHT", 0, 0)
@@ -300,312 +373,122 @@ end
 
 function RS:SetupAddon(addon)
 	if addon == "DBM" then
-		if IsAddOnLoaded("DBM-Profiles") then
-			RS:Print(L["A profile for 'DBM-Profiles' has been created."])
-			RayStyleInstallStepComplete.message = L["DBM-Profiles Profile Created"]
+		if IsAddOnLoaded("DBM-Core") and IsAddOnLoaded("DBM-StatusBarTimers") then
+			RS:Print(L["DBM样式应用完成"])
+			RayStyleInstallStepComplete.message = L["DBM样式应用完成"]
 			RayStyleInstallStepComplete:Show()
-			DeadlyBossModsDB["namespaces"]["DeadlyBarTimers"]["profiles"]["RayStyle"] = {
+			DBT_PersistentOptions = {
 				["DBM"] = {
-					["FillUpBars"] = false,
-					["IconLeft"] = true,
-					["IconRight"] = false,
-					["FontSize"] = 8,
-					["Height"] = 20,
-					["EnlargeBarsTime"] = 15,
-					["Style"] = "DBM",
-					["ExpandUpwards"] = true,
-					["Texture"] = "Interface\\AddOns\\ElvUI\\media\\textures\\normTex2.tga",
-					["Width"] = 361,
-					["Scale"] = 1,
-					["TimerPoint"] = "BOTTOMLEFT",
-					["TimerX"] = 208,
-					["TimerY"] = 182,
-					["BarXOffset"] = 0,
-					["BarYOffset"] = 5,
-					["HugeWidth"] = 230,
-					["HugeScale"] = 1,
-					["HugeTimerPoint"] = "RIGHT",
-					["HugeTimerX"] = -425,
-					["HugeTimerY"] = -50,
+					["EndColorG"] = 0,
 					["HugeBarXOffset"] = 0,
-					["HugeBarYOffset"] = 0,
-					["StartColorR"] = 0,
+					["HugeBarYOffset"] = 6,
+					["HugeScale"] = 1,
+					["HugeWidth"] = 200,
+					["HugeTimerPoint"] = "BOTTOM",
+					["HugeTimerX"] = -180,
+					["HugeTimerY"] = 650,
+					["Scale"] = 1,
+					["EnlargeBarsPercent"] = 0.125,
+					["StartColorR"] = 1,
+					["BarYOffset"] = 6,
+					["Texture"] = "Interface\\AddOns\\ElvUI_RayStyle\\media\\statusbar.tga",
+					["ExpandUpwards"] = true,
+					["TimerPoint"] = "TOPLEFT",
 					["StartColorG"] = 0.7,
-					["StartColorB"] = 1,
-					["EndColorR"] = 0,
-					["EndColorG"] = 0.7,
-					["EndColorB"] = 1,
+					["TimerY"] = -230,
+					["TimerX"] = 375.,
+					["EndColorR"] = 1,
+					["Width"] = 200,
+					["EnlargeBarsTime"] = 8,
+					["StartColorB"] = 0,
+					["Height"] = 20,
+					["BarXOffset"] = 0,
+					["EndColorB"] = 0,
 				},
 			}
-			DeadlyBossModsDB["profiles"]["RayStyle"] = {
-				["SpecialWarningFontSize"] = 16,
-				["SpecialWarningFont"] = "Interface\\AddOns\\ElvUI_RayStyle\\media\\fonts\\pf_tempesta_seven_extended_bold.ttf",
-				["WarningIconLeft"] = false,
+			DBM_SavedOptions = {
+				["SpecialWarningFontSize"] = 30,
+				["WarningIconLeft"] = true,
 				["WarningIconRight"] = false,
-				["WarningIconChat"] = false,
-				["DontShowPT"] = false,
-				["DontShowPTNoID"] = true,
-				["PTCountThreshold"] = 11,
-				["EnableModels"] = false,
-				["ModelSoundValue"] = "",
-				["InfoFramePoint"] = "RIGHT",
-				["InfoFrameX"] = -123,
-				["InfoFrameY"] = -120,
+				["WarningIconChat"] = true,
+				["InfoFramePoint"] = "BOTTOMLEFT",
+				["InfoFrameX"] = 500,
+				["InfoFrameY"] = 220,
 				["InfoFrameLocked"] = true,
-				["RangeFramePoint"] = "BOTTOMRIGHT",
-				["RangeFrameX"] = -237,
-				["RangeFrameY"] = 207,
-				["RangeFrameRadarPoint"] = "BOTTOMRIGHT",
-				["RangeFrameRadarX"] = -261,
-				["RangeFrameRadarY"] = 225,
+				["RangeFramePoint"] = "BOTTOMLEFT",
+				["RangeFrameX"] = 500,
+				["RangeFrameY"] = 55,
+				["RangeFrameRadarPoint"] = "BOTTOMLEFT",
+				["RangeFrameRadarX"] = 500,
+				["RangeFrameRadarY"] = 55,
 				["RangeFrameLocked"] = true,
-				["HPFramePoint"] = "BOTTOMRIGHT",
-				["HPFrameX"] = -221,
-				["HPFrameY"] = 185,
-				["HealthFrameWidth"] = 275,
-				["HealthFrameGrowUp"] = true,
-				["DontShowHealthFrame"] = true,
-				["MovieFilter"] = "AfterFirst",
-				["SpamBlockBossWhispers"] = true,
-				["ShowFlashFrame"] = false,
-				["WarningColors"] = {
-					{
-						["r"] = 0,
-						["g"] = 0.7,
-						["b"] = 1,
-					}, --[1]
-					{
-						["r"] = 0,
-						["g"] = 0.7,
-						["b"] = 1,
-					}, --[2]
-					{
-						["r"] = 0,
-						["g"] = 0.7,
-						["b"] = 1,
-					}, --[3]
-					{
-						["r"] = 0,
-						["g"] = 0.7,
-						["b"] = 1,
-					}, --[4]
-				},
-				["SpecialWarningFontCol"] = {
-					0, --[1]
-					0.7, --[2]
-					1, --[3]
-				},
-				["SpecialWarningFlashCol1"] = {
-					0, --[1]
-					0.7, --[2]
-					1, --[3]
-				},
-				["SpecialWarningFlashCol2"] = {
-					0, --[1]
-					0.7, --[2]
-					1, --[3]
-				},
-				["SpecialWarningFlashCol3"] = {
-					0, --[1]
-					0.7, --[2]
-					1, --[3]
-				},
+				["HPFramePoint"] = "RIGHT",
+				["HPFrameX"] = -500,
+				["HPFrameY"] = 130,
 			}
 		else
-			RS:Print(L["The AddOn 'DBM-Profiles' is not enabled. Profile not created."])
-			RayStyleInstallStepComplete.message = L["DBM-Profiles is not enabled, aborting."]
+			RS:Print(L["插件DBM未启用"])
+			RayStyleInstallStepComplete.message = L["插件DBM未启用"]
 			RayStyleInstallStepComplete:Show()
 		end
 	elseif addon == "Skada" then
 		if IsAddOnLoaded("Skada") then
-			RS:Print(L["A profile for 'Skada' has been created."])
-			RayStyleInstallStepComplete.message = L["Skada Profile Created"]
+			RS:Print(L["Skada样式应用完成"])
+			RayStyleInstallStepComplete.message = L["Skada样式应用完成"]
 			RayStyleInstallStepComplete:Show()
-			SkadaDB["profiles"]["RayStyle"] = {
-				["feed"] = "Damage: Raid DPS",
-				["icon"] = {
-					["hide"] = true,
-				},
-				["columns"] = {
-					["Threat_Threat"] = true,
-					["Damage_Percent"] = true,
-					["Threat_TPS"] = false,
-					["Threat_Percent"] = false,
-				},
-				["tooltiprows"] = 5,
-				["showranks"] = false,
-				["hidedisables"] = false,
-				["tooltippos"] = "topleft",
-				["modulesBlocked"] = {
-					["Debuffs"] = true,
-					["CC"] = true,
-					["Interrupts"] = false,
-					["TotalHealing"] = false,
-					["Power"] = true,
-					["Dispels"] = false,
-				},
+			SkadaDB["profiles"]["Default"] = {
 				["windows"] = {
 					{
-						["titleset"] = false,
-						["barmax"] = 8,
 						["classicons"] = false,
 						["barslocked"] = true,
 						["background"] = {
-							["borderthickness"] = 3,
-							["height"] = 144,
+							["height"] = 132,
+							["texture"] = "ElvUI Blank",
 						},
-						["barfont"] = "2002",
-						["name"] = "Threat",
-						["classcolortext"] = true,
+						["y"] = 13.0000610351563,
+						["barfont"] = "RayStyle Font",
+						["title"] = {
+							["font"] = "RayStyle Font",
+							["texture"] = "RayStyle Normal",
+						},
+						["point"] = "TOPRIGHT",
 						["barcolor"] = {
-							["a"] = 0,
-							["b"] = 0.1568627450980392,
-							["g"] = 0.1568627450980392,
-							["r"] = 0.1568627450980392,
+							["g"] = 0.301960784313726,
+							["r"] = 0.301960784313726,
 						},
-						["barfontsize"] = 10,
-						["mode"] = "Threat",
+						["mode"] = "伤害",
 						["spark"] = false,
-						["buttons"] = {
-							["report"] = false,
-							["menu"] = false,
-							["mode"] = false,
-							["segment"] = false,
-							["reset"] = false,
-						},
-						["barwidth"] = 124.0000305175781,
-						["barspacing"] = 1,
+						["bartexture"] = "RayStyle Normal",
+						["barwidth"] = 402,
 						["barbgcolor"] = {
 							["a"] = 0,
-							["b"] = 0.1647058823529412,
-							["g"] = 0.1647058823529412,
-							["r"] = 0.1647058823529412,
+							["r"] = 0.301960784313726,
+							["g"] = 0.301960784313726,
+							["b"] = 0.301960784313726,
 						},
-						["enabletitle"] = false,
-						["classcolorbars"] = false,
-						["baraltcolor"] = {
-							["r"] = 0.8431372549019608,
-							["g"] = 0.8431372549019608,
-							["b"] = 0.8431372549019608,
-						},
-						["bartexture"] = "Armory",
-						["enablebackground"] = true,
-						["title"] = {
-							["menubutton"] = false,
-							["font"] = "PF T 7 Bold",
-							["fontsize"] = 8,
-							["fontflags"] = "OUTLINEMONOCHROME",
-							["texture"] = "Armory",
-						},
-					}, -- [1]
-					{
-						["classcolortext"] = true,
-						["titleset"] = false,
-						["barheight"] = 15,
-						["barfontsize"] = 10,
-						["scale"] = 1,
-						["barcolor"] = {
-							["a"] = 0,
-							["b"] = 0.1647058823529412,
-							["g"] = 0.1647058823529412,
-							["r"] = 0.1647058823529412,
-						},
-						["mode"] = "Damage",
-						["returnaftercombat"] = false,
-						["clickthrough"] = false,
-						["classicons"] = false,
-						["barslocked"] = true,
-						["snapto"] = true,
-						["barorientation"] = 1,
-						["enabletitle"] = false,
-						["wipemode"] = "",
-						["name"] = "Skada",
-						["background"] = {
-							["borderthickness"] = 0,
-							["color"] = {
-								["a"] = 0.2000000476837158,
-								["r"] = 0,
-								["g"] = 0,
-								["b"] = 0.5019607843137255,
-							},
-							["height"] = 144,
-							["bordertexture"] = "None",
-							["margin"] = 0,
-							["texture"] = "Solid",
-						},
-						["bartexture"] = "Armory",
-						["spark"] = false,
-						["set"] = "current",
-						["barwidth"] = 246.0000305175781,
-						["barspacing"] = 1,
-						["hidden"] = false,
-						["reversegrowth"] = false,
-						["buttons"] = {
-							["segment"] = false,
-							["menu"] = false,
-							["mode"] = false,
-							["report"] = true,
-							["reset"] = false,
-						},
-						["barfont"] = "2002",
-						["title"] = {
-							["color"] = {
-								["a"] = 0.800000011920929,
-								["r"] = 0.1019607843137255,
-								["g"] = 0.1019607843137255,
-								["b"] = 0.3019607843137255,
-							},
-							["bordertexture"] = "None",
-							["font"] = "PF T 7 Ext. Bold",
-							["borderthickness"] = 2,
-							["fontsize"] = 8,
-							["fontflags"] = "",
-							["height"] = 10,
-							["margin"] = 0,
-							["texture"] = "Armory",
-						},
-						["classcolorbars"] = false,
-						["display"] = "bar",
-						["modeincombat"] = "",
-						["barfontflags"] = "",
-						["barbgcolor"] = {
-							["a"] = 0,
-							["b"] = 0.1647058823529412,
-							["g"] = 0.1647058823529412,
-							["r"] = 0.1647058823529412,
-						},
-					}, -- [2]
+						["barfontsize"] = 12,
+						["x"] = 1505,
+					},
 				},
+				["tooltippos"] = "topleft",
 			}
 		else
-			RS:Print(L["The AddOn 'Skada' is not enabled. Profile not created."])
-			RayStyleInstallStepComplete.message = L["Skada is not enabled, aborting."]
+			RS:Print(L["插件Skada未启用"])
+			RayStyleInstallStepComplete.message = L["插件Skada未启用"]
 			RayStyleInstallStepComplete:Show()
 		end
 	end
-end
-
-function RS:SetupAddOnSkins(addon)
 	if IsAddOnLoaded("AddOnSkins") then
 		if addon == "Skada" then
-			RS:Print(L["Skada settings for AddOnSkins have been set."])
-			RayStyleInstallStepComplete.message = L["Skada settings for AddOnSkins have been set."]
-			RayStyleInstallStepComplete:Show()
     		E.private["addonskins"]["EmbedSystem"] = true
 			E.private["addonskins"]["TransparentEmbed"] = true
+			E.private["addonskins"]["SkadaBackdrop"] = false
 			E.private["addonskins"]["EmbedMain"] = "Skada"
 		elseif addon == "DBM" then
-			RS:Print(L["DBM settings for AddOnSkins have been set."])
-			RayStyleInstallStepComplete.message = L["DBM settings for AddOnSkins have been set."]
-			RayStyleInstallStepComplete:Show()
 			E.private["addonskins"]["DBMFont"] = "RayStyle Font"
-			E.private["addonskins"]["DBMFontSize"] = 10
+			E.private["addonskins"]["DBMFontSize"] = 12
 			E.private["addonskins"]["DBMFontFlag"] = "OUTLINE"
 		end
-	else
-		RS:Print(L["The AddOn 'AddOnSkins' is not enabled. No settings have been changed."])
-		RayStyleInstallStepComplete.message = L["AddOnSkins is not enabled, aborting."]
-		RayStyleInstallStepComplete:Show()
 	end
 end
 
@@ -660,33 +543,33 @@ local function SetPage(PageNum)
 	end
 
 	if PageNum == 1 then
-		f.SubTitle:SetText(format(L["Welcome to %s version %s, \nfor ElvUI version %s and above."], RS.title, RS:ColorStr(RS.version), RS:ColorStr(RS.versionMinE)))
-		f.Desc1:SetText(L["This installation process will guide you through a few steps and apply settings to your current ElvUI profile.\nIf you want to be able to go back to your original settings, create a new ElvUI profile (/ec -> Profiles) before going through this installation process."])
-		f.Desc2:SetText(format(L["Options provided by this edit can be found in the %s category of the ElvUI Config (/ec)."], RS.title))
-		f.Desc3:SetText(L["Please press the continue button if you wish to go through the installation process, otherwise click the 'Skip Process' button."])
+		f.SubTitle:SetText(format(L["欢迎使用 %s %s, \n基于 ElvUI %s以上。"], RS.title, RS:ColorStr(RS.version), RS:ColorStr(RS.versionMinE)))
+		f.Desc1:SetText(L["这个安装向导将通过几个简单步骤引导你安装RayStyle样式的设置。"])
+		f.Desc2:SetText(format(L["此扩展美化包的选项设置可以在ElvUI控制台(/ec)的%s分类里找到。"], RS.title))
+		f.Desc3:SetText(L["请点击继续按钮。"])
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", InstallComplete)
 		RayStyleInstallOption1Button:SetText(L["Skip Process"])
 	elseif PageNum == 2 then
 		f.SubTitle:SetText(L["CVars"])
-		f.Desc1:SetText(format(L["This step changes a few World of Warcraft default options. These options are tailored to the needs of the author of %s and are not necessary for this edit to function."], RS.title))
-		f.Desc2:SetText(L["Please click the button below to setup your CVars."])
+		f.Desc1:SetText(format(L["这一步将改变一些魔兽世界的默认设置选项。 这些选项是%s建议设置的，但不影响这个扩展包的功能。"], RS.title))
+		f.Desc2:SetText(L["请点击下面的按钮应用设置"])
 		f.Desc3:SetText(L["Importance: |cffFF0000Low|r"])
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", SetupCVars)
 		RayStyleInstallOption1Button:SetText(L["Setup CVars"])
 	elseif PageNum == 3 then
 		f.SubTitle:SetText(L["Chat"])
-		f.Desc1:SetText(format(L["This step changes your chat windows and positions them all in the left chat panel. These changes are tailored to the needs of the author of %s and are not necessary for this edit to function."], RS.title))
-		f.Desc2:SetText(L["Please click the button below to setup your chat windows."])
+		f.Desc1:SetText(format(L["这一步会改变聊天栏的文字大小以及颜色等设置。这些选项是%s建议设置的，但不影响这个扩展包的功能。"], RS.title))
+		f.Desc2:SetText(L["请点击下面的按钮应用设置"])
 		f.Desc3:SetText(L["Importance: |cffFF0000Low|r"])
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", SetupChat)
 		RayStyleInstallOption1Button:SetText(L["Setup Chat"])					
 	elseif PageNum == 4 then
 		f.SubTitle:SetText(L["Layout"])
-		f.Desc1:SetText(format(L["This step allows you to apply different settings and positions of elements based on the role of your character. This step will change various settings for all ElvUI modules. You need to complete this step if you want your UI to look similar to previews of %s."], RS.title))
-		f.Desc2:SetText(L["Please click any one button below to apply the layout of your choosing."])
+		f.Desc1:SetText(format(L["这一步会改变大部分ElvUI模块的设置。如果你想看起来和%s预览中的界面布局一样你必须完成此项设置。"], RS.title))
+		f.Desc2:SetText(L["请点击下面其中一个按钮完成设置。"])
 		f.Desc3:SetText(L["Importance: |cff07D400High|r"])
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", function() RS:SetupLayout("tank") end)
@@ -701,9 +584,10 @@ local function SetPage(PageNum)
 		RayStyleInstallOption4Button:SetScript("OnClick", function() RS:SetupLayout("dpsCaster") end)
 		RayStyleInstallOption4Button:SetText(L["Caster DPS"])
 	elseif PageNum == 5 then
-		f.SubTitle:SetText(L["AddOns"])
-		f.Desc1:SetFormattedText(L["This step allows you to apply pre-configured settings to various AddOns in order to make their appearance match %s."], RS.title)
-		f.Desc2:SetFormattedText(L["Please click any button below to apply the pre-configured settings for that particular AddOn. A new profile named %s will be created for that particular addon, which you will have to select manually."], RS.title)
+		f.SubTitle:SetText(L["插件"])
+		f.Desc1:SetFormattedText(L["这一步会改变一些插件的设置以便符合%s的风格。"], RS.title)
+		f.Desc2:SetFormattedText(L["请点击下面的按钮来应用插件设置，同时请确认先开启AddOnSkins插件。"], RS.title)
+		f.Desc3:SetText(L["Importance: |cff07D400High|r"])
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", function() RS:SetupAddon("Skada") end)
 		RayStyleInstallOption1Button:SetText("Skada")
@@ -713,21 +597,9 @@ local function SetPage(PageNum)
 		RayStyleInstallOption1Button:SetWidth(140)
 		RayStyleInstallOption2Button:SetWidth(140)
 	elseif PageNum == 6 then
-		f.SubTitle:SetText(L["AddOnSkins Configuration"])
-		f.Desc1:SetFormattedText(L["This step allows you to apply pre-configured settings to AddOnSkins in order to make certain AddOns match %s."], RS.title)
-		f.Desc2:SetText(L["Please click any button below to apply the pre-configured settings for that particular AddOn to the AddOnSkins settings."])
-		RayStyleInstallOption1Button:Show()
-		RayStyleInstallOption1Button:SetScript("OnClick", function() RS:SetupAddOnSkins("Skada") end)
-		RayStyleInstallOption1Button:SetText("Skada")
-		RayStyleInstallOption2Button:Show()
-		RayStyleInstallOption2Button:SetScript("OnClick", function() RS:SetupAddOnSkins("DBM") end)
-		RayStyleInstallOption2Button:SetText("Deadly Boss Mods")
-		RayStyleInstallOption1Button:SetWidth(140)
-		RayStyleInstallOption2Button:SetWidth(140)
-	elseif PageNum == 7 then
 		f.SubTitle:SetText(L["Installation Complete"])
-		f.Desc1:SetText(L["You have completed the installation process.\nIf you need help or wish to report a bug, please go to http://tukui.org"])
-		f.Desc2:SetText(L["Please click the button below in order to finalize the process and automatically reload your UI."])
+		f.Desc1:SetText(L["你已经完成安装.\n如果你想反馈bug，请登录http://rayui.cn"])
+		f.Desc2:SetText(L["请点击下面的按钮来完成安装，这将重载你的界面。"])
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", InstallComplete)
 		RayStyleInstallOption1Button:SetText(L["Finished"])
