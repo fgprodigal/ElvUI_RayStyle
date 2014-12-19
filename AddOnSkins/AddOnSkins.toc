@@ -1,0 +1,10 @@
+## Interface: 60000
+## Title: |cff1784d1AddOnSkins|r
+## Version: 3.11
+## Author: Azilroka, Sortokk
+## SavedVariablesPerCharacter: AddOnSkinsOptions
+## OptionalDep: DSM, ElvUI, Tukui, HydraUI
+## X-Tukui-ProjectID: 128
+## X-Tukui-ProjectFolders: AddOnSkins
+
+Load_AddOnSkins.xml
