@@ -1,0 +1,11 @@
+## Interface: 60000
+## Author: Ray
+## Version: 1.00
+## Title: |cff1784d1ElvUI|r |cff7aa6d6RayStyle|r
+## Notes: Personal edit of ElvUI, Requires original ElvUI.
+## RequiredDeps: ElvUI
+## DefaultState: enabled
+
+core\load_core.xml
+config\load_config.xml
+modules\load_modules.xml
