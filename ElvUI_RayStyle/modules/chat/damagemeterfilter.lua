@@ -17,7 +17,7 @@ local firstLines = {
 	"^Skada: Bericht für (.*) gegen (.*), (.*) bis (.*):$",	-- Skada deDE, might change in new Skada version
 	"^Skada : (.*) pour (.*), de (.*) à (.*) :$",			-- Skada frFR
 	"^(.*) - (.*)의 Skada 보고, (.*) ~ (.*):$",				-- Skada koKR
-	"^Skada战斗报告：(.*)的(.*), (.*)到(.*):$",					-- Skada zhCN, might change in new Skada version
+	"^Skada报告(.*)的(.*)",									-- Skada zhCN, might change in new Skada version
 	"^Skada:(.*)來自(.*)，(.*) - (.*):$",					-- Skada zhTW, might change in new Skada version
 	"^Skada: (.*) for (.*), (.*) - (.*):$",					-- Better Skada support player details
 	"^(.*) Done for (.*)$"	,								-- TinyDPS
@@ -50,7 +50,7 @@ local function FilterLine(event, source, message, ...)
 	for k, v in ipairs(nextLines) do
 		if message:match(v) then
 			local curTime = time()
-			for i, j in ipairs(CH.meters) do
+			for i, j in ipairs(RS.meters) do
 				local elapsed = curTime - j.time
 				if j.source == source and j.event == event and elapsed < 1 then
 					local toInsert = true
@@ -72,7 +72,7 @@ local function FilterLine(event, source, message, ...)
 		if message:match(v) then
 			local curTime = time()
 
-			for i, j in ipairs(CH.meters) do
+			for i, j in ipairs(RS.meters) do
 				local elapsed = curTime - j.time
 				if j.source == source and j.event == event and elapsed < 1 then
 					newID = i
@@ -80,7 +80,7 @@ local function FilterLine(event, source, message, ...)
 				end
 			end
 
-			table.insert(CH.meters, {
+			table.insert(RS.meters, {
 				source	= source,
 				event	= event,
 				time	= curTime,
@@ -88,7 +88,7 @@ local function FilterLine(event, source, message, ...)
 				title	= message
 			})
 
-			for i, j in ipairs(CH.meters) do
+			for i, j in ipairs(RS.meters) do
 				if j.source == source and j.event == event and j.time == curTime then
 					newID = i
 				end
@@ -116,9 +116,39 @@ local function ParseChatEvent(self, event, message, sender, ...)
 	end
 end
 
+local _SetItemRef = SetItemRef
+
 function RS:DamageMeterFilter()
 	for _, event in pairs(events) do
 		ChatFrame_AddMessageEventFilter(event, ParseChatEvent)
 	end
+
+	local TT = E:GetModule("Tooltip")
+	SetItemRef = function(link, text, button, chatFrame)
+		local linkType, id = strsplit(":", link)
+		if linkType == "RayUIDamegeMeters" then
+			local meterID = tonumber(id)
+			ShowUIPanel(ItemRefTooltip)
+			if not ItemRefTooltip:IsShown() then
+				ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE")
+			end
+			ItemRefTooltip:ClearLines()
+			ItemRefTooltip:AddLine(RS.meters[meterID].title)
+			ItemRefTooltip:AddLine(string.format(L["发布者"]..": %s", RS.meters[meterID].source))
+			for k, v in ipairs(RS.meters[meterID].data) do
+				local left, right = v:match("^(.*)  (.*)$")
+				if left and right then
+					ItemRefTooltip:AddDoubleLine(left, right, 1, 1, 1, 1, 1, 1)
+				else
+					ItemRefTooltip:AddLine(v, 1, 1, 1)
+				end
+			end
+			ItemRefTooltip:Show()
+		else
+			return _SetItemRef(link, text, button)
+		end
+	end
+	TT:Unhook("SetItemRef")
+	TT:SecureHook("SetItemRef")
 end
 hooksecurefunc(CH, "StyleChat", RS.DamageMeterFilter)

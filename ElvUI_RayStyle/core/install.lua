@@ -139,6 +139,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.private.general.dmgfont = "RayStyle Combat"
 
 		--general
+		E.db.general.font = "RayStyle Font"
 		E.db.general.bordercolor = { r = 0,g = 0,b = 0 }
 		E.db.general.backdropcolor = { r = 0.1,g = 0.1,b = 0.1 }
 		E.db.general.backdropfadecolor = { r = .04,g = .04,b = .04, a = 0.7 }
@@ -147,7 +148,9 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.general.autoRoll = true
 		E.db.general.vendorGrays = true
 		E.db.general.autoAcceptInvite = true
+		E.db.general.hideErrorFrame = true
 		E.db.general.interruptAnnounce = "NONE"
+		E.db.general.minimap.icons.position = "BOTTOMLEFT"
 		
 		--chat
 		E.db.chat.font = "RayStyle Font"
@@ -232,6 +235,11 @@ function RS:SetupLayout(layout, noDataReset)
 			["BAD"] = { r = 1, g = 0.2, b = 0.2 },
 			["NEUTRAL"] = { r = 1, g = 1, b = 0.2 },
 			["GOOD"] = { r = 0.2, g = 1, b = 0.2 },
+		}
+		E.db.unitframe.colors.healPrediction = {
+			["personal"] = {r = 0, g = 1, b = 0.5, a = 0.25},
+			["others"] = {r = 0, g = 1, b = 0, a = 0.25},
+			["absorbs"] = {r = 0.66, g = 1, b = 1, a = 0.7}
 		}
 		E.db.unitframe.units.player.width = 220
 		E.db.unitframe.units.player.height = 32
@@ -333,6 +341,9 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.datatexts.panels.LeftMiniPanel = "Time"
 		E.db.datatexts.panels.RightMiniPanel = "Combat/Arena Time"
 		E.db.datatexts.goldCoins = true
+
+		--tooltip
+		E.db.tooltip.itemCount = "BOTH"
 
 		RS:SetMoverPosition("ElvUF_PlayerMover", "BOTTOMRIGHT", E.UIParent, "BOTTOM", -80, 390)
 		RS:SetMoverPosition("ElvUF_PlayerCastbarMover", "BOTTOM", E.UIParent, "BOTTOM", 0, 305)

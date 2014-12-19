@@ -8,10 +8,18 @@ local UF = E:GetModule("UnitFrames")
 local LSM = LibStub("LibSharedMedia-3.0")
 local ElvUF = ElvUI.oUF
 
-local units = {"Player", "Target", "Focus", "Arena", "Boss"}
+local function EnableFader(frame)
+	frame.Fader = true
+	frame.FadeSmooth = 0.5
+	frame.FadeMinAlpha = 0.15
+	frame.FadeMaxAlpha = 1
+	frame:EnableElement("Fader")
+end
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function(self)
-	
+	if ElvUF_Player then
+		EnableFader(ElvUF_Player)
+	end
 end)

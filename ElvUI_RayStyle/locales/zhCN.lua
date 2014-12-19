@@ -26,6 +26,10 @@ L["插件DBM未启用"] = true
 L["Skada样式应用完成"] = true
 L["插件Skada未启用"] = true
 
+L["重要buff提醒锚点"] = true
+
+L["发布者"] = true
+
 L['%s是ElvUI的一个外置美化及功能模块。你可以在左边%s下的"%s"里设置参数。'] = true
 L["这个安装向导会在你完成安装ElvUI后自动启动，如果你想重新运行%s安装程序，请点击下面的按钮."] = true
 L["Bottom_Datatext_Panel"] = "底部信息条"

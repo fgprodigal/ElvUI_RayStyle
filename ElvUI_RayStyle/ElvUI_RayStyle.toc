@@ -6,6 +6,7 @@
 ## RequiredDeps: ElvUI
 ## DefaultState: enabled
 
+libs\load_libs.xml
 locales\load_locales.xml
 core\load_core.xml
 config\load_config.xml
