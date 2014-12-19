@@ -137,12 +137,14 @@ function RS:SetupLayout(layout, noDataReset)
 		E.private.general.glossTex = "RayStyle Gloss"
 		E.private.general.namefont = "RayStyle Font"
 		E.private.general.dmgfont = "RayStyle Combat"
+		E.private.general.smallerWorldMap = true
 
 		--general
 		E.db.general.font = "RayStyle Font"
 		E.db.general.bordercolor = { r = 0,g = 0,b = 0 }
 		E.db.general.backdropcolor = { r = 0.1,g = 0.1,b = 0.1 }
 		E.db.general.backdropfadecolor = { r = .04,g = .04,b = .04, a = 0.7 }
+		E.db.general.valuecolor = { r = 0,g = 0.7,b = 1 }
 		E.db.general.bottomPanel = false
 		E.db.general.autoRepair = "GUILD"
 		E.db.general.autoRoll = true
@@ -150,7 +152,8 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.general.autoAcceptInvite = true
 		E.db.general.hideErrorFrame = true
 		E.db.general.interruptAnnounce = "NONE"
-		E.db.general.minimap.icons.position = "BOTTOMLEFT"
+		E.db.general.minimap.icons.garrison.position = "BOTTOMLEFT"
+		E.db.general.minimap.icons.garrison.scale = 0.7
 		
 		--chat
 		E.db.chat.font = "RayStyle Font"
@@ -158,6 +161,8 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.chat.panelTabTransparency = false
 		E.db.chat.editBoxPosition = "ABOVE_CHAT"
 		E.db.chat.tabFont = "RayStyle Font"
+		E.db.chat.tabFontSize = 12
+		E.db.chat.tabFontOutline = "NONE"
 		E.db.chat.timeStampFormat = "%H:%M "
 		
 		--nameplate
@@ -177,6 +182,11 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.nameplate.debuffs.fontOutline = "OUTLINE"
 		E.db.nameplate.threat.goodColor = { r = 0.2,  g = 1, b = 0.2 }
 		E.db.nameplate.threat.badColor = {r = 1, g = 0.2, b = 0.2}
+		E.db.nameplate.healthBar.text.enable = true
+		E.db.nameplate.healthBar.text.format = "PERCENT"
+		E.db.nameplate.castBar.height = 5
+		E.db.nameplate.castBar.color = { r = 0,g = 1,b = 0 }
+		E.db.nameplate.castBar.noInterrupt = { r = 1,g = 0,b = 0 }
 
 		--unitframe
 		E.db.unitframe.statusbar = "RayStyle Normal"
@@ -246,6 +256,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.player.portrait.enable = true
 		E.db.unitframe.units.player.portrait.overlay = true
 		E.db.unitframe.units.player.portrait.camDistanceScale = 1
+		E.db.unitframe.units.player.castbar.icon = false
 		E.db.unitframe.units.player.castbar.width = 350
 		E.db.unitframe.units.player.castbar.height = 7
 		E.db.unitframe.units.player.power.height = 3
@@ -325,7 +336,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.auras.fontSize = 12
 		E.db.auras.fontOutline = "OUTLINE"
 		E.db.auras.consolidatedBuffs.font = "RayStyle Font"
-		E.db.auras.consolidatedBuffs.fontSize = 12
+		E.db.auras.consolidatedBuffs.fontSize = 10
 		E.db.auras.consolidatedBuffs.fontOutline = "OUTLINE"
 
 		--datatexts
@@ -456,16 +467,16 @@ function RS:SetupAddon(addon)
 							["height"] = 132,
 							["texture"] = "ElvUI Blank",
 						},
-						["y"] = 13.0000610351563,
 						["barfont"] = "RayStyle Font",
+						["barfontflags"] = "THINOUTLINE",
 						["title"] = {
 							["font"] = "RayStyle Font",
 							["texture"] = "RayStyle Normal",
 						},
 						["point"] = "TOPRIGHT",
 						["barcolor"] = {
-							["g"] = 0.301960784313726,
-							["r"] = 0.301960784313726,
+							["g"] = 0.3,
+							["r"] = 0.3,
 						},
 						["mode"] = "伤害",
 						["spark"] = false,
@@ -473,12 +484,11 @@ function RS:SetupAddon(addon)
 						["barwidth"] = 402,
 						["barbgcolor"] = {
 							["a"] = 0,
-							["r"] = 0.301960784313726,
-							["g"] = 0.301960784313726,
-							["b"] = 0.301960784313726,
+							["r"] = 0.3,
+							["g"] = 0.3,
+							["b"] = 0.3,
 						},
 						["barfontsize"] = 12,
-						["x"] = 1505,
 					},
 				},
 				["tooltippos"] = "topleft",

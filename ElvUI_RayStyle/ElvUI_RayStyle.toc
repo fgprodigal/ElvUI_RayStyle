@@ -11,3 +11,4 @@ locales\load_locales.xml
 core\load_core.xml
 config\load_config.xml
 modules\load_modules.xml
+mini\load_mini.xml

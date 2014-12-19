@@ -12,6 +12,8 @@ local units = {"Player", "Target", "Focus", "Arena", "Boss"}
 
 local function CustomizeCastbar(self)
 	self.LatencyTexture:SetVertexColor(1, 0, 0, 0.75)
+	self.Text:SetTextColor(1, 1, 1)
+	self.Time:SetTextColor(1, 1, 1)
 end
 
 local function CustomizePlayerCastbar(self, frame, db)

@@ -74,6 +74,7 @@ local function FixActionButtonCooldown(button)
 end
 
 function AH:EnableAutoHide()
+	AH:RegisterEvent("PLAYER_ENTERING_WORLD", "OnAutoHideEvent")
 	AH:RegisterEvent("PLAYER_REGEN_ENABLED", "OnAutoHideEvent")
 	AH:RegisterEvent("PLAYER_REGEN_DISABLED", "OnAutoHideEvent")
 	AH:RegisterEvent("PLAYER_TARGET_CHANGED", "OnAutoHideEvent")

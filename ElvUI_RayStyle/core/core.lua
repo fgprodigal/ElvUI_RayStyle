@@ -11,6 +11,10 @@ local format = string.format
 
 RS["media"] = {}
 
+function RS.dummy()
+	return
+end
+
 local ItemUpgrade = setmetatable ({
 	[1]   =  8, -- 1/1
 	[373] =  4, -- 1/2

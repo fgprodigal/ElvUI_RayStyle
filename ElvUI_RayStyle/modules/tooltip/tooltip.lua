@@ -274,4 +274,7 @@ local function CustomizeTooltip(self, tooltip)
 	end
 end
 
+DropDownList1MenuBackdrop:Kill()
+DropDownList2MenuBackdrop:Kill()
+
 hooksecurefunc(TT, "GameTooltip_OnTooltipSetUnit", CustomizeTooltip)
