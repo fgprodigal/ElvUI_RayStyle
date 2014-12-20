@@ -11,4 +11,5 @@
 	<Include file="unitframes\load_unitframes.xml"/>
 	<Include file="watcher\load_watcher.xml"/>
 	<Include file="notification\load_notification.xml"/>
+	<Include file="cooldownflash\load_cooldownflash.xml"/>
 </Ui>

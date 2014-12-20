@@ -60,6 +60,7 @@ end
 local function FixActionButtonCooldown(button)
 	if not button then return end
 	if not button.cooldown then return end
+	if button:GetParent():GetParent()~=ActionBarHider then return end
 	local name = button:GetName()
 	local cooldown = button.cooldown
 	local start, duration, enable, charges, maxCharges
@@ -98,7 +99,7 @@ function AH:EnableAutoHide()
 		end
 	end
 	
-	hooksecurefunc(ActionBarHider, "Show", function(self,alpha)
+	hooksecurefunc(ActionBarHider, "Show", function(self)
 		for button in pairs(AB["handledbuttons"]) do
 			if button then
 				FixActionButtonCooldown(button)

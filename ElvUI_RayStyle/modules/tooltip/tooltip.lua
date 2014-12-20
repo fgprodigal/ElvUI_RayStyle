@@ -277,3 +277,44 @@ end
 DropDownList1MenuBackdrop:Kill()
 
 hooksecurefunc(TT, "GameTooltip_OnTooltipSetUnit", CustomizeTooltip)
+
+local function SetStyle(self, tt)
+	if not tt.backdrop then
+		tt:CreateBackdrop("Transparent")
+		tt.backdrop:SetInside()
+
+		local getBackdrop = function()
+			return tt.backdrop:GetBackdrop()
+		end
+
+		local getBackdropColor = function()
+			return unpack(E.media.backdropfadecolor)
+		end
+
+		local getBackdropBorderColor = function()
+			return unpack(E.media.bordercolor)
+		end
+
+		tt.GetBackdrop = getBackdrop
+		tt.GetBackdropColor = getBackdropColor
+		tt.GetBackdropBorderColor = getBackdropBorderColor
+	end
+	tt:SetBackdrop(nil)
+	tt:SetBackdropColor(E.media.backdropfadecolor)
+	local item
+	if tt.GetItem then
+		item = select(2, tt:GetItem())
+	end
+	if item then
+		local quality = select(3, GetItemInfo(item))
+		if quality and quality > 1 then
+			local r, g, b = GetItemQualityColor(quality)
+			tt.backdrop:SetBackdropBorderColor(r, g, b)
+		else
+			tt.backdrop:SetBackdropBorderColor(0, 0, 0)
+		end
+	else
+		tt.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
+	end
+end
+hooksecurefunc(TT, "SetStyle", SetStyle)

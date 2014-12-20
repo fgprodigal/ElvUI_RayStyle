@@ -59,4 +59,16 @@ P["RS"] = {
 	["unitframe"] = {
 		["fader"] = true,
 	},
+
+	["cooldownflash"]={
+		["enable"] = true,
+		["fadeInTime"] = 0.1,
+		["fadeOutTime"] = 0.2,
+		["maxAlpha"] = 0.8,
+		["animScale"] = 1.2,
+		["iconSize"] = 80,
+		["holdTime"] = 0.3,
+		["enablePet"] = false,
+		["showSpellName"] = false,
+	},
 }

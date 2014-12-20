@@ -347,7 +347,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.auras.countYOffset = 6
 		E.db.auras.countXOffset = 22
 		E.db.auras.timeYOffset = 7
-		E.db.auras.timeXOffset = 0
+		E.db.auras.timeXOffset = 2
 		E.db.auras.consolidatedBuffs.font = "RayStyle Font"
 		E.db.auras.consolidatedBuffs.fontSize = 10
 		E.db.auras.consolidatedBuffs.fontOutline = "OUTLINE"

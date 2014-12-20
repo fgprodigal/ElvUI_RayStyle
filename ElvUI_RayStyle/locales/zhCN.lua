@@ -30,6 +30,17 @@ L["杂项"] = true
 L["自动交接任务"] = true
 L["自动交接任务，按shift点npc则不自动交接"] = true
 
+L["中部冷却闪光"] = true
+    L["图标大小"] = true
+    L["淡入时间"] = true
+    L["淡出时间"] = true
+    L["最大透明度"] = true
+    L["持续时间"] = true
+    L["动画大小"] = true
+    L["显示法术名称"] = true
+    L["监视宠物技能"] = true
+    L["测试"] = true
+
 L["自动隐藏"] = true
 
 L["头像渐隐"] = true
