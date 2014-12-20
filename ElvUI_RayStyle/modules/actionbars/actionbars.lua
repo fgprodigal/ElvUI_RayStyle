@@ -29,3 +29,49 @@ local function SetupExtraButton()
 	end
 end
 hooksecurefunc(AB, "SetupExtraButton", SetupExtraButton)
+
+local function UnitFramesOptions()
+	local group = {}
+	for i=1, 6 do
+		local name = L["Bar "]..i
+		group["bar"..i] = {
+			order = i,
+			name = name,
+			type = "group",
+			get = function(info)
+				return E.db.RS.actionbar["bar"..i][ info[#info] ]
+			end,
+			set = function(info, value)
+				E.db.RS.actionbar["bar"..i][ info[#info] ] = value
+				E:StaticPopup_Show("CONFIG_RL")
+			end,
+			args = {
+				autohide = {
+					order = 1,
+					type = "toggle",
+					name = L["自动隐藏"],
+				},
+			},
+		}
+	end
+	E.Options.args.RS.args.config.args.actionbar = {
+		order = 1,
+		type = "group",
+		name = L["ActionBars"],
+		args = {
+			header = {
+				order = 1,
+				type = "header",
+				name = RS:ColorStr(L["ActionBars"]),
+			},
+			general = {
+				order = 2,
+				type = "group",
+				name = L["General"],
+				guiInline = true,
+				args = group,
+			},
+		},
+	}
+end
+RS.configs["actionbar"] = UnitFramesOptions

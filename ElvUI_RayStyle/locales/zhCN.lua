@@ -26,6 +26,15 @@ L["插件DBM未启用"] = true
 L["Skada样式应用完成"] = true
 L["插件Skada未启用"] = true
 
+L["杂项"] = true
+L["自动交接任务"] = true
+L["自动交接任务，按shift点npc则不自动交接"] = true
+
+L["自动隐藏"] = true
+
+L["头像渐隐"] = true
+L["开启/关闭头像渐隐"] = true
+
 L["重要buff提醒锚点"] = true
 
 L["发布者"] = true

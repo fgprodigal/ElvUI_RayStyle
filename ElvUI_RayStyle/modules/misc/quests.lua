@@ -21,7 +21,6 @@ function RS:LoadMisc_Quest()
 	end
 	hooksecurefunc("QuestLogQuests_Update", questlevel)
 
-	if not E.db.RS.misc.quest then return end
     local QuickQuest = CreateFrame("Frame")
     QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 

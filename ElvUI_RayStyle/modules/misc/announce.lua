@@ -37,7 +37,7 @@ function RS:LoadMisc_Announce()
 			local icon =GetSpellTexture(id)
 
 			if eventType=="SPELL_INTERRUPT" then
-				if IsInGroup() then
+				if IsInGroup() and E.db.general.interruptAnnounce=="NONE" then
 					if IsPartyLFG() then
 						SendChatMessage(msg..": "..destName.." \124cff71d5ff\124Hspell:"..id.."\124h["..effect.."]\124h\124r!", "INSTANCE_CHAT")
 					elseif IsInRaid() then

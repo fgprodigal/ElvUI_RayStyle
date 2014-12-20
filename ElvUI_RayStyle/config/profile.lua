@@ -26,6 +26,18 @@ P["RS"] = {
 		["bar3"] = {
 			["autohide"] = true,
 		},
+
+		["bar4"] = {
+			["autohide"] = false,
+		},
+
+		["bar5"] = {
+			["autohide"] = false,
+		},
+
+		["bar6"] = {
+			["autohide"] = false,
+		},
 	},
 	
 	["datatexts"] = {
@@ -38,10 +50,13 @@ P["RS"] = {
 		},
 	},
 	
-	["misc"]={
+	["misc"] = {
 		["anounce"] = true,
 		["auction"] = true,
-		["quest"] = true,
 		["automation"] = true,
+	},
+
+	["unitframe"] = {
+		["fader"] = true,
 	},
 }
