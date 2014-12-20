@@ -129,6 +129,28 @@ function RS:ColorGradient(perc, ...)
 	return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
 end
 
+function E:ShortValue(v)
+	if E.db.RS.general.numberType == 1 or ( GetLocale()~="zhCN" and GetLocale()~="zhTW" ) then
+		if v >= 1e9 then
+			return ("%.1fb"):format(v / 1e9):gsub("%.?0+([kmb])$", "%1")
+		elseif v >= 1e6 then
+			return ("%.1fm"):format(v / 1e6):gsub("%.?0+([kmb])$", "%1")
+		elseif v >= 1e3 or v <= -1e3 then
+			return ("%.1fk"):format(v / 1e3):gsub("%.?0+([kmb])$", "%1")
+		else
+			return v
+		end
+	else
+		if v >= 1e8 or v <= -1e8 then
+			return ("%.1f" .. SECOND_NUMBER_CAP):format(v / 1e8):gsub("%.?0+([kmb])$", "%1")
+		elseif v >= 1e4 or v <= -1e4 then
+			return ("%.1f" .. FIRST_NUMBER_CAP):format(v / 1e4):gsub("%.?0+([kmb])$", "%1")
+		else
+			return v
+		end
+	end
+end
+
 RS.Developer = { "夏琉君", "鏡婲水月", "Divineseraph", "水月君", "夏翎", }
 
 function RS:IsDeveloper()

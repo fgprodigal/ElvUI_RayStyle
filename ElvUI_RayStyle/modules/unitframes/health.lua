@@ -123,6 +123,7 @@ f:SetScript("OnEvent", function(self)
 			oag:SetBlendMode("ADD")
 			oag:SetPoint("TOPLEFT", object.Health, "TOPRIGHT", -5, 0)
 			oag:SetPoint("BOTTOMLEFT", object.Health, "BOTTOMRIGHT", -5, 0)
+			oag:Hide()
 			object.HealPrediction.overAbsorbGlow = oag
 			hooksecurefunc(object.HealPrediction, "PostUpdate", PostUpdateHealPrediction)
 		end

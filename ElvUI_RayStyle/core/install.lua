@@ -267,6 +267,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.player.debuffs.attachTo = "FRAME"
 		E.db.unitframe.units.player.debuffs.yOffset = 7
 		E.db.unitframe.units.player.classbar.height = 7
+		E.db.unitframe.units.player.health.text_format = "[RayStyle:healthcolor][health:current-percent]"
 		E.db.unitframe.units.target.width = 220
 		E.db.unitframe.units.target.height = 32
 		E.db.unitframe.units.target.portrait.enable = true
@@ -284,6 +285,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.target.combobar.height = 7
 		E.db.unitframe.units.target.combobar.detachFromFrame = true
 		E.db.unitframe.units.target.combobar.detachedWidth = 220
+		E.db.unitframe.units.target.health.text_format = "[RayStyle:healthcolor][health:current-percent]"
 		E.db.unitframe.units.targettarget.height = 32
 		E.db.unitframe.units.targettarget.power.height = 3
 		E.db.unitframe.units.targettarget.debuffs.anchorPoint = "TOPLEFT"
@@ -291,13 +293,20 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.tank.enable = false
 		E.db.unitframe.units.assist.enable = false
 		E.db.unitframe.units.raid.enable = true
+		E.db.unitframe.units.raid.healPrediction = true
 		E.db.unitframe.units.raid.growthDirection = "RIGHT_UP"
 		E.db.unitframe.units.raid.height = 40
 		E.db.unitframe.units.raid.power.height = 3
 		E.db.unitframe.units.raid40.enable = true
+		E.db.unitframe.units.raid40.healPrediction = true
 		E.db.unitframe.units.raid40.growthDirection = "RIGHT_UP"
 		E.db.unitframe.units.raid40.power.enable = true
 		E.db.unitframe.units.raid40.power.height = 3
+		E.db.unitframe.units.raidpet.health.text_format = "[RayStyle:healthcolor][health:deficit]"
+		E.db.unitframe.units.boss.health.text_format = "[RayStyle:healthcolor][health:current]"
+		E.db.unitframe.units.arena.health.text_format = "[RayStyle:healthcolor][health:current]"
+		E.db.unitframe.units.party.healPrediction = true
+		E.db.unitframe.units.party.health.text_format = "[RayStyle:healthcolor][health:current-percent]"
 
 		--actionbar
 		E.db.actionbar.font = "RayStyle Font"
@@ -333,8 +342,12 @@ function RS:SetupLayout(layout, noDataReset)
 
 		--auras
 		E.db.auras.font = "RayStyle Font"
-		E.db.auras.fontSize = 12
+		E.db.auras.fontSize = 14
 		E.db.auras.fontOutline = "OUTLINE"
+		E.db.auras.countYOffset = 6
+		E.db.auras.countXOffset = 22
+		E.db.auras.timeYOffset = 7
+		E.db.auras.timeXOffset = 0
 		E.db.auras.consolidatedBuffs.font = "RayStyle Font"
 		E.db.auras.consolidatedBuffs.fontSize = 10
 		E.db.auras.consolidatedBuffs.fontOutline = "OUTLINE"
@@ -382,6 +395,12 @@ function RS:SetupLayout(layout, noDataReset)
 			E.db.RS.datatexts.panels.Bottom_Datatext_Panel.middle = "Attack Power"
 		end
 
+		if layout == "healer" then
+			E.db.unitframe.units.raid.health.text_format = "[RayStyle:healthcolor][health:deficit]"
+		else
+			E.db.unitframe.units.raid.health.text_format = ""
+		end
+
 		if RayStyleInstallStepComplete then
 			RayStyleInstallStepComplete.message = L["Layout Set"]
 			RayStyleInstallStepComplete:Show()
@@ -401,7 +420,6 @@ function RS:SetupAddon(addon)
 			RayStyleInstallStepComplete:Show()
 			DBT_PersistentOptions = {
 				["DBM"] = {
-					["EndColorG"] = 0,
 					["HugeBarXOffset"] = 0,
 					["HugeBarYOffset"] = 6,
 					["HugeScale"] = 1,
@@ -411,21 +429,16 @@ function RS:SetupAddon(addon)
 					["HugeTimerY"] = 650,
 					["Scale"] = 1,
 					["EnlargeBarsPercent"] = 0.125,
-					["StartColorR"] = 1,
 					["BarYOffset"] = 6,
 					["Texture"] = "Interface\\AddOns\\ElvUI_RayStyle\\media\\statusbar.tga",
 					["ExpandUpwards"] = true,
 					["TimerPoint"] = "TOPLEFT",
-					["StartColorG"] = 0.7,
 					["TimerY"] = -230,
 					["TimerX"] = 375.,
-					["EndColorR"] = 1,
 					["Width"] = 200,
 					["EnlargeBarsTime"] = 8,
-					["StartColorB"] = 0,
 					["Height"] = 20,
 					["BarXOffset"] = 0,
-					["EndColorB"] = 0,
 				},
 			}
 			DBM_SavedOptions = {

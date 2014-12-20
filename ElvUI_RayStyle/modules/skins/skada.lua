@@ -25,4 +25,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 	end)
+
+	for _, window in ipairs(Skada:GetWindows()) do
+		window:UpdateDisplay()
+	end
 end)

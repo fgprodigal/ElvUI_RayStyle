@@ -29,6 +29,14 @@ for class, color in pairs(ElvUF["colors"].class) do
 	CUSTOM_CLASS_COLORS[class] = { r = color[1], g = color[2], b = color[3] }
 end
 
+E.TimeColors = {
+	[0] = NORMAL_FONT_COLOR_CODE,
+	[1] = NORMAL_FONT_COLOR_CODE,
+	[2] = NORMAL_FONT_COLOR_CODE,
+	[3] = "|cffff0000",
+	[4] = "|cffff0000",
+}
+
 LSM:Register("statusbar","RayStyle Normal", [[Interface\AddOns\ElvUI_RayStyle\media\statusbar.tga]])
 LSM:Register("statusbar","RayStyle Gloss", [[Interface\AddOns\ElvUI_RayStyle\media\gloss.tga]])
 LSM:Register("font","RayStyle RoadWay", [[Interface\AddOns\ElvUI_RayStyle\media\roadway.ttf]], 255)
