@@ -23,7 +23,6 @@ local talentcache = {}
 local ilvcache = {}
 local talentcurrent = {}
 local ilvcurrent = {}
-local highestilvl = 600
 
 local lastInspectRequest = 0
 
@@ -131,11 +130,7 @@ function RS:SetiLV()
 end
 
 function RS:GetQuality(ItemScore)
-	if ItemScore < highestilvl then
-		return 1, 1, 0.1
-	else
-		return RS:ColorGradient((ItemScore - highestilvl)/100, 1, 1, 0.1, 1, 0.1, 0.1)
-	end
+	return RS:GetItemLevelColor(ItemScore)
 end
 
 function RS:iLVSetUnit()

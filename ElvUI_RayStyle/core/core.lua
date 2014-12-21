@@ -151,6 +151,61 @@ function E:ShortValue(v)
 	end
 end
 
+local smoothing = {}
+local function Smooth(self, value)
+	if value ~= self:GetValue() or value == 0 then
+		smoothing[self] = value
+	else
+		smoothing[self] = nil
+	end
+end
+
+function RS:SmoothBar(bar)
+	if not bar.SetValue_ then
+		bar.SetValue_ = bar.SetValue
+		bar.SetValue = Smooth
+	end
+end
+
+local SmoothUpdate = CreateFrame("Frame")
+SmoothUpdate:SetScript("OnUpdate", function()
+	local rate = GetFramerate()
+	local limit = 30/rate
+
+	for bar, value in pairs(smoothing) do
+		local cur = bar:GetValue()
+		local new = cur + min((value-cur)/3, max(value-cur, limit))
+		if new ~= new then
+			new = value
+		end
+		bar:SetValue_(new)
+		if (cur == value or math.abs(new - value) < 1) then
+			bar:SetValue_(value)
+			smoothing[bar] = nil
+		end
+	end
+end)
+
+local GREY = {0.55,0.55,0.55}
+local RED = {1,0,0}
+local ORANGE = {1,0.7,0}
+local YELLOW = {1,1,0}
+local GREEN = {0,1,0}
+
+function RS:GetItemLevelColor(ilevel)
+	local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
+	if ilevel > avgItemLevelEquipped then
+		return unpack(RED)
+	elseif avgItemLevelEquipped - ilevel < 20 then
+		return unpack(ORANGE)
+	elseif avgItemLevelEquipped - ilevel < 40 then
+		return unpack(YELLOW)
+	elseif avgItemLevelEquipped - ilevel < 60 then
+		return unpack(GREEN)
+	else
+		return unpack(GREY)
+	end
+end
 RS.Developer = { "夏琉君", "鏡婲水月", "Divineseraph", "水月君", "夏翎", }
 
 function RS:IsDeveloper()

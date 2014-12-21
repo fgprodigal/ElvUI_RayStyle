@@ -40,6 +40,7 @@ E.TimeColors = {
 LSM:Register("statusbar","RayStyle Normal", [[Interface\AddOns\ElvUI_RayStyle\media\statusbar.tga]])
 LSM:Register("statusbar","RayStyle Gloss", [[Interface\AddOns\ElvUI_RayStyle\media\gloss.tga]])
 LSM:Register("font","RayStyle RoadWay", [[Interface\AddOns\ElvUI_RayStyle\media\roadway.ttf]], 255)
+LSM:Register("font","RayStyle Pixel", [[Interface\AddOns\ElvUI_RayStyle\media\pixel.ttf]], 255)
 if GetLocale() == "zhCN" then
 	LSM:Register("font","RayStyle Font", [[Fonts\ARKai_T.ttf]], 255)
 	LSM:Register("font","RayStyle Combat", [[Fonts\ARKai_DB.ttf]], 255)

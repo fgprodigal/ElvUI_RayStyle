@@ -11,6 +11,7 @@ local RS = E:GetModule("RayStyle")
 P["RS"] = {	
 	["general"] = {
 		["cdFont"] = "RayStyle RoadWay",
+		["pxFont"] = "RayStyle Pixel",
 		["numberType"] = 2,
 	},
 

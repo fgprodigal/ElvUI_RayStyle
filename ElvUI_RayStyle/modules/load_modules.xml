@@ -12,4 +12,6 @@
 	<Include file="watcher\load_watcher.xml"/>
 	<Include file="notification\load_notification.xml"/>
 	<Include file="cooldownflash\load_cooldownflash.xml"/>
+	<Include file="nameplates\load_nameplates.xml"/>
+	<Include file="bags\load_bags.xml"/>
 </Ui>
