@@ -15,7 +15,7 @@ local function LoadSkin()
 	GarrisonCapacitiveDisplayFrame:CreateBackdrop("Transparent")
 	GarrisonCapacitiveDisplayFrame.Inset:StripTextures()
 	S:HandleCloseButton(GarrisonCapacitiveDisplayFrame.CloseButton, GarrisonCapacitiveDisplayFrame.backdrop)
-	S:HandleButton(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton)
+	S:HandleButton(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
 	local CapacitiveDisplay = GarrisonCapacitiveDisplayFrame.CapacitiveDisplay
 	CapacitiveDisplay.IconBG:SetTexture()
 	CapacitiveDisplay.ShipmentIconFrame.Icon:SetTexCoord(unpack(E.TexCoords))
@@ -98,7 +98,10 @@ local function LoadSkin()
 	local MissionList = MissionTab.MissionList
 	MissionList:DisableDrawLayer("BORDER")
 	S:HandleScrollBar(MissionList.listScroll.scrollBar)
+	S:HandleCloseButton(GarrisonMissionFrame.MissionTab.MissionPage.CloseButton)
 	S:HandleButton(MissionList.CompleteDialog.BorderFrame.ViewButton)
+	S:HandleButton(GarrisonMissionFrame.MissionTab.MissionPage.StartMissionButton)
+	S:HandleButton(GarrisonMissionFrame.MissionComplete.NextMissionButton)
 
 	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRewards)
 		if self.numRewardsStyled == nil then
@@ -118,7 +121,7 @@ local function LoadSkin()
 	end)
 
 	-- Landing page
-	GarrisonLandingPage:StripTextures(true)
+	-- GarrisonLandingPage:StripTextures(true) -- I actually like the look of this texture. Not sure if we want to remove it.
 	GarrisonLandingPage:CreateBackdrop("Transparent")
 	S:HandleCloseButton(GarrisonLandingPage.CloseButton, GarrisonLandingPage.backdrop)
 	S:HandleTab(GarrisonLandingPageTab1)
