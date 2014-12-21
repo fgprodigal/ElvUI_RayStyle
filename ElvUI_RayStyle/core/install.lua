@@ -112,7 +112,7 @@ local function SetupCVars()
 	SetCVar("autoDismountFlying", 1)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("autoQuestProgress", 1)
-	SetCVar("guildMemberNotify", 0)
+	SetCVar("guildMemberNotify", 1)
 	SetCVar("removeChatDelay", 1)
 	SetCVar("showVKeyCastbar", 1)
 	SetCVar("colorblindMode", 0)
@@ -128,6 +128,11 @@ local function SetupCVars()
 end
 
 function RS:SetupLayout(layout, noDataReset)
+	if not noDataReset then
+		E:CopyTable(E.db.unitframe.units, P.unitframe.units)
+		E:CopyTable(E.db.actionbar, P.actionbar)
+	end
+
 	--Set up various settings shared across all layouts
 	if not noDataReset then
 		--private
@@ -361,7 +366,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.datatexts.panels.LeftChatDataPanel.middle = "Durability"
 		E.db.datatexts.panels.LeftChatDataPanel.right = "Talent/Loot Specialization"
 		E.db.datatexts.panels.RightChatDataPanel.left = "Call to Arms"
-		E.db.datatexts.panels.RightChatDataPanel.middle = "Bags"
+		E.db.datatexts.panels.RightChatDataPanel.middle = "Skada"
 		E.db.datatexts.panels.LeftMiniPanel = "Time"
 		E.db.datatexts.panels.RightMiniPanel = "Combat/Arena Time"
 		E.db.datatexts.goldCoins = true
@@ -378,12 +383,14 @@ function RS:SetupLayout(layout, noDataReset)
 		RS:SetMoverPosition("ElvUF_FocusMover", "BOTTOMRIGHT", ElvUF_Player, "TOPLEFT", -20, 20)
 		RS:SetMoverPosition("ElvUF_RaidMover", "BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 215)
 		RS:SetMoverPosition("ElvUF_Raid40Mover", "BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 215)
+		RS:SetMoverPosition("ElvUF_PartyMover", "BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 215)
 		RS:SetMoverPosition("ElvAB_1", "BOTTOM", E.UIParent, "BOTTOM", -90, 235)
 		RS:SetMoverPosition("ElvAB_2", "BOTTOM", ElvAB_1, "TOP", 0, -2)
 		RS:SetMoverPosition("ElvAB_3", "BOTTOMLEFT", ElvAB_1, "BOTTOMRIGHT", 0, 0)
 		RS:SetMoverPosition("ElvAB_4", "RIGHT", E.UIParent, "RIGHT", -35, 0)
 		RS:SetMoverPosition("ElvAB_5", "RIGHT", E.UIParent, "RIGHT", -5, 0)
 		RS:SetMoverPosition("BossButton", "CENTER", E.UIParent, "BOTTOM", 500, 510)
+		RS:SetMoverPosition("AlertFrameMover", "CENTER", E.UIParent, "CENTER", 0, 210)
 	end
 	
 	--Datatexts
@@ -515,8 +522,9 @@ function RS:SetupAddon(addon)
 	if IsAddOnLoaded("AddOnSkins") then
 		if addon == "Skada" then
     		E.private["addonskins"]["EmbedSystem"] = true
+			E.private["addonskins"]["EmbedOoC"] = true
 			E.private["addonskins"]["TransparentEmbed"] = true
-			E.private["addonskins"]["SkadaBackdrop"] = false
+			E.private["addonskins"]["SkadaBackdrop"] = true
 			E.private["addonskins"]["EmbedMain"] = "Skada"
 		elseif addon == "DBM" then
 			E.private["addonskins"]["DBMFont"] = "RayStyle Font"

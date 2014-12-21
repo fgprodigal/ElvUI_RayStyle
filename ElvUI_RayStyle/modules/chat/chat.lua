@@ -16,16 +16,8 @@ local function StyleChat()
 end
 hooksecurefunc(CH, "StyleChat", StyleChat)
 
-local function updateFS(self, inc, flags, ...)
+local function updateFS(self, ...)
 	local fstring = self:GetFontString()
-	if(...) then
-		fstring:SetTextColor(...)
-	end
-
-	if (inc or self.ffl) then
-		fstring:SetTextColor(1,0,0)
-	end
-
 	local x = fstring:GetText()
 	if x:find("cff") then
 		x = x:match("\124cff%w%w%w%w%w%w(.+)\124r")
@@ -35,19 +27,28 @@ local function updateFS(self, inc, flags, ...)
 	end
 end
 
-function RS:FaneifyTab(frame, sel)
+function RS:FaneifyTab(frame)
 	local i = frame:GetID()
 	if(i == SELECTED_CHAT_FRAME:GetID()) then
-		updateFS(frame,nil, nil, .5, 1, 1)
+		updateFS(frame, .5, 1, 1)
 	else
-		updateFS(frame,nil, nil, 1, 1, 1)
+		updateFS(frame, 1, 1, 1)
 	end
 end
-RS:SecureHook("FCFTab_UpdateColors", "FaneifyTab")
 
-local function test(self, event, ...)
+local function StyleGlowTab(self, event, ...)
 	if self.glow:IsShown() then
-		updateFS(self, nil, nil, 1, 0, 0)
+		updateFS(self, 1, 0, 0)
 	end
 end
-hooksecurefunc(CH, "ChatTab_OnUpdate", test)
+hooksecurefunc(CH, "ChatTab_OnUpdate", StyleGlowTab)
+
+local function StyleTabText(self, frame)
+	local name = frame:GetName()
+	local tab = _G[name.."Tab"]
+	tab.text = _G[name.."TabText"]
+	hooksecurefunc(tab.text, "SetTextColor", function(self)
+		RS:FaneifyTab(tab)
+	end)
+end
+hooksecurefunc(CH, "StyleChat", StyleTabText)

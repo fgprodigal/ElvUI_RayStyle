@@ -27,6 +27,7 @@ L["Skada样式应用完成"] = true
 L["插件Skada未启用"] = true
 
 L["杂项"] = true
+L["数字单位"] = true
 L["自动交接任务"] = true
 L["自动交接任务，按shift点npc则不自动交接"] = true
 

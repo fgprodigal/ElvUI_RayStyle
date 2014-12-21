@@ -64,7 +64,48 @@ function RS:InsertOptions()
 				type = "group",
 				name = "选项",
 				childGroups = "tab",
-				args = {},
+				args = {
+					general = {
+					order = 1,
+					type = "group",
+					name = L["General"],
+					args = {
+						header = {
+							order = 1,
+							type = "header",
+							name = RS:ColorStr(L["杂项"]),
+						},
+						general = {
+							order = 2,
+							type = "group",
+							name = L["General"],
+							guiInline = true,
+							get = function(info)
+								return E.db.RS.general[ info[#info] ]
+							end,
+							set = function(info, value)
+								E.db.RS.general[ info[#info] ] = value
+								E:StaticPopup_Show("CONFIG_RL")
+							end,
+							args = {
+								numberType = {
+									order = 1,
+									type = "toggle",
+									name = L["数字单位"],
+									type = "select",
+									values = {
+										[1] = "k,m",
+										[2] = FIRST_NUMBER_CAP .. "," .. SECOND_NUMBER_CAP,
+									},
+									hidden = function()
+										return GetLocale()~="zhCN" and GetLocale()~="zhTW"
+									end
+								},
+							},
+						},
+					},
+					},
+				},
 			},
 		},
 	}

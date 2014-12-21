@@ -7,6 +7,11 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, Pr
 local S = E:GetModule("Skins")
 local RS = E:GetModule("RayStyle")
 
+local function SetFontStyle(self, font, size, flag)
+	self:SetShadowOffset(0, 0)
+	if flag ~= "OUTLINE" then self:SetFont(font, size, "OUTLINE") end
+end
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(self, event, addon)
@@ -16,10 +21,12 @@ f:SetScript("OnEvent", function(self, event, addon)
 		for _,window in ipairs(self:GetWindows()) do
 			for i,v in pairs(window.bargroup:GetBars()) do
 				if not v.BarStyled then
-					v.label:SetShadowOffset(0, 0)
-					v.label.SetShadowOffset = RS.dummy
-					v.timerLabel:SetShadowOffset(0, 0)
-					v.timerLabel.SetShadowOffset = RS.dummy
+					local font, size = v.label:GetFont()
+					v.label:SetFont(font, size, "OUTLINE")
+					hooksecurefunc(v.label, "SetFont", SetFontStyle)
+					local font, size = v.timerLabel:GetFont()
+					v.timerLabel:SetFont(font, size, "OUTLINE")
+					hooksecurefunc(v.timerLabel, "SetFont", SetFontStyle)
 					v.BarStyled = true
 				end
 			end
