@@ -143,6 +143,8 @@ function RS:SetupLayout(layout, noDataReset)
 		E.private.general.namefont = "RayStyle Font"
 		E.private.general.dmgfont = "RayStyle Combat"
 		E.private.general.smallerWorldMap = true
+		E.private.skins.blizzard.alertframes = true
+		E.private.skins.blizzard.questChoice = true
 
 		--general
 		E.db.general.font = "RayStyle Font"
