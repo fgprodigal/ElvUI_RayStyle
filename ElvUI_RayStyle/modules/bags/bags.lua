@@ -29,9 +29,10 @@ local function UpdateSlot(self, bagID, slotID)
 	slot.ilvl:SetText("")
 
 	if clink then
-		local _, _, _, itemLevel, _, itemType = GetItemInfo(clink)
+		local _, _, _, _, _, itemType = GetItemInfo(clink)
+		local itemLevel = RS:GetItemUpgradeLevel(clink)
 		if itemType == armor or itemType == weapon and itemLevel > 1 then
-			slot.ilvl:SetTextColor(RS:GetItemLevelColor(itemLevel))
+			slot.ilvl:SetTextColor(RS:GetItemLevelColor(RS:GetItemUpgradeLevel(clink)))
 			slot.ilvl:SetText(itemLevel)
 		end
 	end
@@ -55,9 +56,9 @@ local function UpdateCharacterSlot(unit)
 			slot.ilvl:SetShadowOffset(1, -1)
 		end
 		slot.ilvl:SetText("")
-		local id = GetInventoryItemID(unit, slotid)
-		if id then
-			local _, _, _, itemLevel = GetItemInfo(id)
+		local link = GetInventoryItemLink(unit, slotid)
+		if link then
+			local itemLevel = RS:GetItemUpgradeLevel(link)
 			if itemLevel and itemLevel > 1 then
 				slot.ilvl:SetTextColor(RS:GetItemLevelColor(itemLevel))
 				slot.ilvl:SetText(itemLevel)

@@ -181,10 +181,10 @@ end
 SLASH_TESTNOTIFICATION1 = "/testnotification"
 
 function NF:Initialize()
-	f = CreateFrame("Frame", "RayUINotifications", UIParent)
+	f = CreateFrame("Frame", "RayUINotifications", E.UIParent)
 	f:SetFrameStrata("FULLSCREEN_DIALOG")
 	f:Size(bannerWidth, 50)
-	f:SetPoint("TOP", UIParent, "TOP")
+	f:SetPoint("TOP", E.UIParent, "TOP")
 	f:Hide()
 	f:SetAlpha(0.1)
 	f:SetScale(0.1)

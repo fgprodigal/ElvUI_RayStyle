@@ -52,3 +52,16 @@ local function StyleTabText(self, frame)
 	end)
 end
 hooksecurefunc(CH, "StyleChat", StyleTabText)
+
+local function OnHyperlinkEnter(self, frame, refString)
+	if InCombatLockdown() then return; end
+	if GameTooltip:IsShown() and frame:GetParent() then
+		GameTooltip:ClearAllPoints()
+		if frame:GetParent() == LeftChatPanel then
+			GameTooltip:Point("BOTTOMLEFT", LeftChatPanel, "TOPLEFT", 0, 2)
+		else
+			GameTooltip:Point("BOTTOMRIGHT", RightChatPanel, "TOPRIGHT", 0, 2)
+		end
+	end
+end
+hooksecurefunc(CH, "OnHyperlinkEnter", OnHyperlinkEnter)

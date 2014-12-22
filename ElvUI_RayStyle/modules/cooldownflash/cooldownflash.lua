@@ -6,7 +6,7 @@ local cooldowns, animating, watching = { }, { }, { }
 local GetTime = GetTime
 local testtable
 
-local DCP = CreateFrame("frame", nil, UIParent)
+local DCP = CreateFrame("frame", nil, E.UIParent)
 DCP:SetAlpha(0)
 DCP:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 DCP.TextFrame = DCP:CreateFontString(nil, "ARTWORK")
@@ -245,7 +245,7 @@ function CF:Initialize()
     if self.db.enable then
         self:EnableCooldownFlash()
     end
-    DCP:SetPoint("CENTER", UIParent, "CENTER")
+    DCP:SetPoint("CENTER", E.UIParent, "CENTER")
 	E:CreateMover(DCP, "CooldownFlashMover", L["中部冷却闪光"], true, nil)  
     local spellname, _, icon = GetSpellInfo(16914)
     testtable = { icon, nil, spellname }

@@ -7,6 +7,22 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, Pr
 local M = E:GetModule("Misc")
 local RS = E:GetModule("RayStyle")
 
+local hideStatic = false
+local f = CreateFrame("Frame")
+f:RegisterEvent("PARTY_INVITE_REQUEST")
+f:RegisterEvent("GROUP_ROSTER_UPDATE")
+f:SetScript("OnEvent", function(self, event)
+	if event == "PARTY_INVITE_REQUEST" then
+		if QueueStatusMinimapButton:IsShown() then return end
+		if IsInGroup() then return end
+		hideStatic = true
+	elseif event == "GROUP_ROSTER_UPDATE" and hideStatic == true then
+		StaticPopup_Hide("PARTY_INVITE")
+		StaticPopup_Hide("PARTY_INVITE_XREALM")
+		hideStatic = false
+	end
+end)
+
 local function MiscOptions()
 	E.Options.args.RS.args.config.args.misc = {
 		order = 1,

@@ -98,7 +98,7 @@ function watcherPrototype:CreateButton(mode)
 	if mode=="BAR" then
 		button.statusbar = CreateFrame("StatusBar", nil, button)
 		button.statusbar:SetFrameStrata("BACKGROUND")
-		button.statusbar:CreateShadow("Background")
+		button.statusbar:CreateBackdrop("Transparent")
 		button.statusbar:SetWidth(self.barwidth - 6)
 		button.statusbar:SetHeight(5)
 		button.statusbar:SetStatusBarTexture(E["media"].normTex)
@@ -487,9 +487,9 @@ function RW:NewWatcher(data)
 		end
 	end
 
-	module.holder = CreateFrame("Frame", nil, UIParent)
+	module.holder = CreateFrame("Frame", nil, E.UIParent)
 	module.holder:SetSize(module.size, module.size)
-	module.parent = CreateFrame("Frame", module.name, UIParent)
+	module.parent = CreateFrame("Frame", module.name, E.UIParent)
 	module.parent:SetAllPoints(holder)
 
 	module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")

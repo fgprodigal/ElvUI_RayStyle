@@ -143,6 +143,7 @@ function RS:SetupLayout(layout, noDataReset)
 		E.private.general.namefont = "RayStyle Font"
 		E.private.general.dmgfont = "RayStyle Combat"
 		E.private.general.smallerWorldMap = true
+		E.private.general.minimap.hideGarrison = false
 		E.private.skins.blizzard.alertframes = true
 		E.private.skins.blizzard.questChoice = true
 
@@ -443,33 +444,35 @@ function RS:SetupAddon(addon)
 					["ExpandUpwards"] = true,
 					["TimerPoint"] = "TOPLEFT",
 					["TimerY"] = -230,
-					["TimerX"] = 375.,
+					["TimerX"] = 375,
 					["Width"] = 200,
 					["EnlargeBarsTime"] = 8,
 					["Height"] = 20,
 					["BarXOffset"] = 0,
 				},
 			}
-			DBM_SavedOptions = {
-				["SpecialWarningFontSize"] = 30,
-				["WarningIconLeft"] = true,
-				["WarningIconRight"] = false,
-				["WarningIconChat"] = true,
-				["InfoFramePoint"] = "BOTTOMLEFT",
-				["InfoFrameX"] = 500,
-				["InfoFrameY"] = 220,
-				["InfoFrameLocked"] = true,
-				["RangeFramePoint"] = "BOTTOMLEFT",
-				["RangeFrameX"] = 500,
-				["RangeFrameY"] = 55,
-				["RangeFrameRadarPoint"] = "BOTTOMLEFT",
-				["RangeFrameRadarX"] = 500,
-				["RangeFrameRadarY"] = 55,
-				["RangeFrameLocked"] = true,
-				["HPFramePoint"] = "RIGHT",
-				["HPFrameX"] = -500,
-				["HPFrameY"] = 130,
-			}
+
+			E:CopyTable(DBM_SavedOptions, DBM.DefaultOptions)
+			DBM_SavedOptions.SpecialWarningFontSize = 30
+			DBM_SavedOptions.WarningIconLeft = true
+			DBM_SavedOptions.WarningIconRight = false
+			DBM_SavedOptions.WarningIconChat = true
+			DBM_SavedOptions.InfoFramePoint = "BOTTOMLEFT"
+			DBM_SavedOptions.InfoFrameX = 500
+			DBM_SavedOptions.InfoFrameY = 220
+			DBM_SavedOptions.InfoFrameLocked = true
+			DBM_SavedOptions.RangeFramePoint = "BOTTOMLEFT"
+			DBM_SavedOptions.RangeFrameX = 500
+			DBM_SavedOptions.RangeFrameY = 55
+			DBM_SavedOptions.RangeFrameRadarPoint = "BOTTOMLEFT"
+			DBM_SavedOptions.RangeFrameRadarX = 500
+			DBM_SavedOptions.RangeFrameRadarY = 55
+			DBM_SavedOptions.RangeFrameLocked = true
+			DBM_SavedOptions.HPFramePoint = "RIGHT"
+			DBM_SavedOptions.HPFrameX = -500
+			DBM_SavedOptions.HPFrameY = 130
+			DBM_SavedOptions.HideObjectivesFrame = false
+			DBM_SavedOptions.MovieFilter = "AfterFirst"
 		else
 			RS:Print(L["插件DBM未启用"])
 			RayStyleInstallStepComplete.message = L["插件DBM未启用"]
