@@ -9,6 +9,8 @@ local function LoadSkin()
 	GarrisonBuildingFrame.TitleText:Show()
 	GarrisonBuildingFrame:CreateBackdrop("Transparent")
 	S:HandleCloseButton(GarrisonBuildingFrame.CloseButton, GarrisonBuildingFrame.backdrop)
+	GarrisonBuildingFrame.BuildingLevelTooltip:StripTextures()
+	GarrisonBuildingFrame.BuildingLevelTooltip:SetTemplate('Transparent')
 
 	-- Capacitive display frame
 	GarrisonCapacitiveDisplayFrame:StripTextures(true)
@@ -21,6 +23,9 @@ local function LoadSkin()
 	CapacitiveDisplay.ShipmentIconFrame.Icon:SetTexCoord(unpack(E.TexCoords))
 	CapacitiveDisplay.ShipmentIconFrame:SetTemplate("Default", true)
 	CapacitiveDisplay.ShipmentIconFrame.Icon:SetInside()
+	--Fix unitframes appearing above work orders
+	GarrisonCapacitiveDisplayFrame:SetFrameStrata("MEDIUM")
+	GarrisonCapacitiveDisplayFrame:SetFrameLevel(45)
 
 	do
 		local reagentIndex = 1
@@ -72,17 +77,25 @@ local function LoadSkin()
 
 	-- Handle MasterPlan AddOn
 	do
-		local f = CreateFrame("Frame")
-		f:RegisterEvent("ADDON_LOADED")
-		f:SetScript("OnEvent", function(self, event, addon)
-			if addon == "MasterPlan" then
-				S:HandleTab(GarrisonMissionFrameTab3)
-				local MissionPage = GarrisonMissionFrame.MissionTab.MissionPage
-				S:HandleCloseButton(MissionPage.MinimizeButton, nil, "-")
-				MissionPage.MinimizeButton:SetFrameLevel(MissionPage:GetFrameLevel() + 2)
-				self:UnregisterEvent("ADDON_LOADED")
-			end
-		end)
+		local function skinMasterPlan()
+			S:HandleTab(GarrisonMissionFrameTab3)
+			local MissionPage = GarrisonMissionFrame.MissionTab.MissionPage
+			S:HandleCloseButton(MissionPage.MinimizeButton, nil, "-")
+			MissionPage.MinimizeButton:SetFrameLevel(MissionPage:GetFrameLevel() + 2)
+		end
+		
+		if IsAddOnLoaded("MasterPlan") then
+			skinMasterPlan()
+		else
+			local f = CreateFrame("Frame")
+			f:RegisterEvent("ADDON_LOADED")
+			f:SetScript("OnEvent", function(self, event, addon)
+				if addon == "MasterPlan" then
+					skinMasterPlan()
+					self:UnregisterEvent("ADDON_LOADED")
+				end
+			end)
+		end
 	end
 
 	-- Follower list
