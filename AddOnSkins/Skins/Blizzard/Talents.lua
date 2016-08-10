@@ -1,60 +1,77 @@
 local AS = unpack(AddOnSkins)
 
+local AddOnSkinned = 0
 function AS:Blizzard_Talent(event, addon)
-	if addon == 'Blizzard_TalentUI' or IsAddOnLoaded('Blizzard_TalentUI') then
-		local buttons = {
-			PlayerTalentFrameTalentsLearnButton,
-			PlayerTalentFrameActivateButton,
-			PlayerTalentFramePetSpecializationLearnButton,
-			PlayerTalentFrameSpecializationLearnButton
-		}
-
-		for _, button in pairs(buttons) do
-			AS:StripTextures(button)
-			AS:SkinButton(button)
-		end
-
-		PlayerTalentFrameTalentsTutorialButton.Ring:Hide()
-		PlayerTalentFrameTalentsTutorialButton:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
-		PlayerTalentFrameSpecializationTutorialButton.Ring:Hide()
-		PlayerTalentFrameSpecializationTutorialButton:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
-		PlayerTalentFramePetSpecializationTutorialButton.Ring:Hide()
-		PlayerTalentFramePetSpecializationTutorialButton:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
-
-		AS:SkinFrame(PlayerTalentFrame)
+	if (addon == 'Blizzard_TalentUI' or IsAddOnLoaded('Blizzard_TalentUI')) then
+		AS:SkinFrame(PlayerTalentFrame, nil, nil, true)
 		AS:StripTextures(PlayerTalentFrameInset)
 		AS:StripTextures(PlayerTalentFrameTalents, true)
 		AS:SkinCloseButton(PlayerTalentFrameCloseButton)
 
-		AS:SkinFrame(PlayerTalentFrameTalentsClearInfoFrame)
-		AS:SkinTexture(PlayerTalentFrameTalentsClearInfoFrameIcon)
-		PlayerTalentFrameTalentsClearInfoFrameIcon:SetInside()
+		PlayerTalentFramePortrait:Kill()
+
+		for _, Button in pairs({ PlayerTalentFrameTalentsTutorialButton, PlayerTalentFrameSpecializationTutorialButton, PlayerTalentFramePetSpecializationTutorialButton }) do
+			Button.Ring:Hide()
+			Button:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
+		end
+
+		AS:SkinButton(PlayerTalentFrameActivateButton, true)
+		AS:SkinButton(PlayerTalentFrameSpecializationLearnButton, true)
 
 		for i = 1, 6 do
 			select(i, PlayerTalentFrameSpecialization:GetRegions()):Hide()
-			select(i, PlayerTalentFramePetSpecialization:GetRegions()):Hide()
 		end
 
 		for i = 1, 5 do
 			select(i, PlayerTalentFrameSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
-			select(i, PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
 		end
 
 		select(7, PlayerTalentFrameSpecialization:GetChildren()):DisableDrawLayer("OVERLAY")
-		select(7, PlayerTalentFramePetSpecialization:GetChildren()):DisableDrawLayer("OVERLAY")
 
-		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
+		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetColorTexture(1, 1, 1)
 		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(0.2)
 
-		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
+		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetColorTexture(1, 1, 1)
 		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(0.2)
 
-		local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
+		if AS.MyClass == "HUNTER" then
+			for i = 1, 6 do
+				select(i, PlayerTalentFramePetSpecialization:GetRegions()):Hide()
+			end
 
-		for _, name in pairs(buttons) do
+			for i=1, PlayerTalentFramePetSpecialization:GetNumChildren() do
+				local child = select(i, PlayerTalentFramePetSpecialization:GetChildren())
+				if child and not child:GetName() then
+					child:DisableDrawLayer("OVERLAY")
+				end
+			end
+
+			for i = 1, 5 do
+				select(i, PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
+			end
+
+			for i = 1, GetNumSpecializations(false, true) do
+				local bu = PlayerTalentFramePetSpecialization["specButton"..i]
+				local _, _, _, icon = GetSpecializationInfo(i, false, true)
+
+				bu.ring:Hide()
+				bu.specIcon:SetTexture(icon)
+				bu.specIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+				bu.specIcon:SetSize(50, 50)
+				bu.specIcon:Point("LEFT", bu, "LEFT", 15, 0)
+
+				bu.SelectedTexture = bu:CreateTexture(nil, 'ARTWORK')
+				bu.SelectedTexture:SetColorTexture(1, 1, 0, 0.1)
+			end
+
+			PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetColorTexture(1, 1, 1, 0.2)
+			AS:SkinButton(PlayerTalentFramePetSpecializationLearnButton, true)
+		end
+
+		for _, name in pairs({"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}) do
 			for i = 1, 4 do
 				local bu = _G[name..i]
-				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:SetTexture(nil)
+				_G[name..i.."Glow"]:SetTexture(nil)
 
 				bu:SetHighlightTexture("")
 				bu.bg:SetAlpha(0)
@@ -143,23 +160,22 @@ function AS:Blizzard_Talent(event, addon)
 
 			local bonuses
 			if self.isPet then
-				bonuses = {GetSpecializationSpells(shownSpec, nil, self.isPet)}
+				bonuses = {GetSpecializationSpells(shownSpec, nil, self.isPet, true)}
 			else
 				bonuses = SPEC_SPELLS_DISPLAY[id]
 			end
 
 			for i = 1, #bonuses, 2 do
 				local frame = scrollChild["abilityButton"..index]
-				local _, icon = GetSpellTexture(bonuses[i])
-				if not frame.reskinned then
-					frame.reskinned = true
-					frame:Size(30, 30)
-					frame.ring:Hide()
+				if frame and not frame.reskinned then
 					AS:SetTemplate(frame)
 					AS:SkinTexture(frame.icon)
+					frame:Size(45, 45)
+					frame.ring:Hide()
 					frame.icon:SetInside()			
+					frame.icon:SetTexture(select(2, GetSpellTexture(bonuses[i])))
+					frame.reskinned = true
 				end
-				frame.icon:SetTexture(icon)
 				index = index + 1
 			end
 
@@ -178,6 +194,7 @@ function AS:Blizzard_Talent(event, addon)
 		for i = 1, MAX_TALENT_TIERS do
 			local Row = _G["PlayerTalentFrameTalentsTalentRow"..i]
 			AS:StripTextures(Row, true)
+			Row.GlowFrame:Kill()
 
 			for j = 1, NUM_TALENT_COLUMNS do
 				local Button = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
@@ -202,9 +219,6 @@ function AS:Blizzard_Talent(event, addon)
 					if self.knownSelection:IsShown() then
 						self.Backdrop:SetBackdropBorderColor(0, 0.44, .87, 1)
 						self.Border:SetBackdropBorderColor(0, 0.44, .87, 1)
-					elseif self.learnSelection:IsShown() then
-						self.Backdrop:SetBackdropBorderColor(1, 0.82, 0, 1)
-						self.Border:SetBackdropBorderColor(1, 0.82, 0, 1)
 					else
 						self.Backdrop:SetBackdropBorderColor(unpack(AS.BorderColor))
 						self.Border:SetBackdropBorderColor(unpack(AS.BorderColor))
@@ -245,6 +259,87 @@ function AS:Blizzard_Talent(event, addon)
 		TalentMicroButtonAlert.Text:SetTextColor(1, 1, 0)
 		TalentMicroButtonAlert:ClearAllPoints()
 		TalentMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, -6)
+
+		AS:StripTextures(PlayerTalentFramePVPTalents.Talents)
+
+		PlayerTalentFramePVPTalents.XPBar:StripTextures()
+		PlayerTalentFramePVPTalents.XPBar.PrestigeReward.Accept:ClearAllPoints()
+		PlayerTalentFramePVPTalents.XPBar.PrestigeReward.Accept:SetPoint("TOP", PlayerTalentFramePVPTalents.XPBar.PrestigeReward, "BOTTOM", 0, 0)
+		AS:SkinButton(PlayerTalentFramePVPTalents.XPBar.PrestigeReward.Accept)
+
+		AS:SkinStatusBar(PlayerTalentFramePVPTalents.XPBar.Bar)
+
+		for i = 1, MAX_PVP_TALENT_TIERS do
+			local Row = PlayerTalentFramePVPTalents.Talents["Tier"..i]
+			Row.Bg:Hide()
+			Row:DisableDrawLayer("BORDER")
+			Row:StripTextures()
+			Row.GlowFrame:Kill()
+
+			Row.TopLine:Point("TOP", 0, 4)
+			Row.BottomLine:Point("BOTTOM", 0, -4)
+
+			for j = 1, MAX_PVP_TALENT_COLUMNS do
+				local Button = Row["Talent"..j];
+
+				AS:SkinBackdropFrame(Button)
+				Button:SetFrameLevel(Button:GetFrameLevel() + 2)
+				Button.Backdrop:Point("TOPLEFT", 15, -1)
+				Button.Backdrop:Point("BOTTOMRIGHT", -10, 1)
+
+				Button.Border = CreateFrame("Frame", nil, Button)
+				AS:SkinFrame(Button.Border)
+				Button.Border:SetBackdropColor(0, 0, 0, 0)
+				Button.Border:SetOutside(Button.Icon)
+				Button.Icon:Size(32)
+				Button.Icon:SetDrawLayer("ARTWORK")
+				AS:SkinTexture(Button.Icon)
+				Button:HookScript('OnEnter', function(self)
+					self.Backdrop:SetBackdropBorderColor(1, .82, 0)
+					self.Border:SetBackdropBorderColor(1, .82, 0)
+				end)
+				Button:HookScript('OnLeave', function(self) 
+					if self.knownSelection:IsShown() then
+						self.Backdrop:SetBackdropBorderColor(0, 0.44, .87, 1)
+						self.Border:SetBackdropBorderColor(0, 0.44, .87, 1)
+					else
+						self.Backdrop:SetBackdropBorderColor(unpack(AS.BorderColor))
+						self.Border:SetBackdropBorderColor(unpack(AS.BorderColor))
+					end
+				end)
+			end
+		end
+
+		--Create portrait element for the PvP Talent Frame so we can see prestige
+		local portrait = PlayerTalentFramePVPTalents:CreateTexture(nil, "OVERLAY")
+		portrait:SetSize(57,57);
+		portrait:SetPoint("CENTER", PlayerTalentFramePVPTalents.PortraitBackground, "CENTER", 0, 0);
+		--Kill background
+		PlayerTalentFramePVPTalents.PortraitBackground:Kill()
+		--Reposition portrait by repositioning the background
+		PlayerTalentFramePVPTalents.PortraitBackground:ClearAllPoints()
+		PlayerTalentFramePVPTalents.PortraitBackground:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", 5, -5)
+		--Reposition the wreath
+		PlayerTalentFramePVPTalents.SmallWreath:ClearAllPoints()
+		PlayerTalentFramePVPTalents.SmallWreath:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -2, -25)
+		--Update texture according to prestige
+		hooksecurefunc("PlayerTalentFramePVPTalents_SetUp", function()
+			local prestigeLevel = UnitPrestige("player");
+			if (prestigeLevel > 0) then
+				portrait:SetTexture(GetPrestigeInfo(prestigeLevel));
+			end
+		end)
+
+		-- Prestige Level Dialog
+		PVPTalentPrestigeLevelDialog:StripTextures()
+		PVPTalentPrestigeLevelDialog:CreateBackdrop('Transparent')
+		PVPTalentPrestigeLevelDialog.Laurel:SetAtlas("honorsystem-prestige-laurel", true) --Re-add textures removed by StripTextures()
+		PVPTalentPrestigeLevelDialog.TopDivider:SetAtlas("honorsystem-prestige-rewardline", true)
+		PVPTalentPrestigeLevelDialog.BottomDivider:SetAtlas("honorsystem-prestige-rewardline", true)
+		AS:SkinButton(PVPTalentPrestigeLevelDialog.Accept)
+		AS:SkinButton(PVPTalentPrestigeLevelDialog.Cancel)
+		AS:SkinCloseButton(PVPTalentPrestigeLevelDialog.CloseButton) --There are 2 buttons with the exact same name, may not be able to skin it properly until fixed by Blizzard.
+
 		AS:UnregisterSkinEvent('Blizzard_Talent', 'ADDON_LOADED')
 	end
 end

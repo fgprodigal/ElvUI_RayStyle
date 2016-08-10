@@ -9,9 +9,7 @@ local EmbedSystem_MainWindow, EmbedSystem_LeftWindow, EmbedSystem_RightWindow
 function AS:GetChatWindowInfo()
 	local ChatTabInfo = {['NONE'] = 'NONE'}
 	for i = 1, NUM_CHAT_WINDOWS do
-		local tab = _G["ChatFrame"..i.."Tab"];
-
-		ChatTabInfo["ChatFrame"..i] = tab:GetText()
+		ChatTabInfo["ChatFrame"..i] = _G["ChatFrame"..i.."Tab"]:GetText()
 	end
 	return ChatTabInfo
 end
@@ -19,9 +17,16 @@ end
 function AS:ToggleChatFrame(Hide)
 	if AS:CheckOption('HideChatFrame') == 'NONE' then return end
 	if Hide then
+		_G[AS:CheckOption('HideChatFrame')].OriginalParent = _G[AS:CheckOption('HideChatFrame')]:GetParent()
 		_G[AS:CheckOption('HideChatFrame')]:SetParent(AS.ChatFrameHider)
+
+		_G[AS:CheckOption('HideChatFrame')..'Tab'].OriginalParent = _G[AS:CheckOption('HideChatFrame')..'Tab']:GetParent()
+		_G[AS:CheckOption('HideChatFrame')..'Tab']:SetParent(AS.ChatFrameHider)
 	else
-		_G[AS:CheckOption('HideChatFrame')]:SetParent(UIParent)
+		if _G[AS:CheckOption('HideChatFrame')].OriginalParent then
+			_G[AS:CheckOption('HideChatFrame')]:SetParent(_G[AS:CheckOption('HideChatFrame')].OriginalParent)
+			_G[AS:CheckOption('HideChatFrame')..'Tab']:SetParent(_G[AS:CheckOption('HideChatFrame')..'Tab'].OriginalParent)
+		end
 	end
 end
 
@@ -33,6 +38,11 @@ function AS:EmbedInit()
 			EmbedSystem_RightWindow = CreateFrame('Frame', 'EmbedSystem_RightWindow', EmbedSystem_MainWindow)
 
 			AS.EmbedSystemCreated = true
+
+			if (AS:CheckOption('EmbedSystem') and AS:CheckOption('EmbedSystemDual')) then
+				AS:DisableOption('EmbedSystem')
+				AS:DisableOption('EmbedSystemDual')
+			end
 
 			AS:EmbedSystemHooks()
 			AS:EmbedSystem_WindowResize()
@@ -156,7 +166,7 @@ function AS:Embed_Toggle(Message)
 			Frame:SetInside(EmbedSystem_RightWindow, 0, 0)
 		end
 	end
-	if Message then
+	if Message and AS:CheckOption('EmbedSystemMessage') then
 		local Message = format("Main: '%s'", AS:CheckOption('EmbedMain'))
 		if AS:CheckOption('EmbedSystemDual') then Message = format("Left: '%s' | Right: '%s'", AS:CheckOption('EmbedLeft'), AS:CheckOption('EmbedRight')) end
 		AS:Print(format('Embed System: - %s', Message))
@@ -205,7 +215,11 @@ if AS:CheckAddOn('Omen') then
 		Omen.BarList.SetBackdropColor = nil
 		Omen.BarList.SetBackdropBorderColor = nil
 
-		AS:SkinFrame(Omen.BarList, AS:CheckOption('TransparentEmbed') and 'Transparent' or 'Default')
+		if AS:CheckOption('OmenBackdrop') then
+			AS:SkinFrame(Omen.BarList, AS:CheckOption('TransparentEmbed') and 'Transparent' or 'Default')
+		else
+			AS:StripTextures(Omen.BarList)
+		end
 
 		Omen.BarList.SetBackdrop = AS.Noop
 		Omen.BarList.SetBackdropColor = AS.Noop
@@ -238,9 +252,7 @@ if AS:CheckAddOn('TinyDPS') then
 		if AS:CheckOption('EmbedSystemDual') then EmbedParent = AS:CheckOption('EmbedRight') == 'TinyDPS' and EmbedSystem_RightWindow or EmbedSystem_LeftWindow end
 		EmbedParent.FrameName = "tdpsFrame"
 
-		if AS:CheckOption('TinyDPS') then
-			AS:SkinFrame(tdpsFrame, AS:CheckOption('TransparentEmbed') and 'Transparent' or 'Default')
-		end
+		AS:SkinFrame(tdpsFrame, AS:CheckOption('TransparentEmbed') and 'Transparent' or 'Default')
 
 		tdpsFrame:SetParent(EmbedParent)
 		tdpsFrame:SetFrameStrata('LOW')
@@ -303,7 +315,7 @@ if AS:CheckAddOn('Skada') then
 				offsety = 2 + (window.db.enabletitle and window.db.title.height or 0)
 			end
 			window.db.barwidth = width - 4
-			window.db.background.height = height - (window.db.enabletitle and window.db.title.height or 0) - (IsAddOnLoaded('ElvUI') and ElvUI[1].PixelMode and 4 or 5)
+			window.db.background.height = height - (window.db.enabletitle and window.db.title.height or 0) - (AS.PixelMode and 4 or 5)
 			window.db.spark = false
 			window.db.barslocked = true
 			window.bargroup.ClearAllPoints = nil
@@ -337,7 +349,6 @@ if AS:CheckAddOn('Skada') then
 	end
 end
 
-
 if AS:CheckAddOn('Details') then
 	AS['DetailsInstances'] = {}
 	function AS:Embed_Details()
@@ -346,7 +357,7 @@ if AS:CheckAddOn('Details') then
 		--> internally in Details!, a window is called 'instance'.
 		--> instances can be opened and closed at any time.
 		for inumber, instance in Details:ListInstances() do
-			tinsert (AS.DetailsInstances, instance)
+			tinsert(AS.DetailsInstances, instance)
 		end
 
 		local NumberToEmbed = 0
@@ -372,19 +383,16 @@ if AS:CheckAddOn('Details') then
 		for i = instances_amount+1, NumberToEmbed do
 			local new_instance = Details:CreateInstance (i)
 			--> just check is the instance is created okey
-			if (type (new_instance) == "table") then
-				tinsert (AS.DetailsInstances, new_instance)
+			if (type(new_instance) == "table") then
+				tinsert(AS.DetailsInstances, new_instance)
 			end
 		end
 
 		--> remove tooltip borders
-		Details:SetTooltipBackdrop ("Blizzard Tooltip", 16, {1, 1, 1, 0})
-		--> use white square borders
-		--Details:SetTooltipBackdrop ("Details BarBorder 2", 24, {1, 1, 1, 1})
+		Details:SetTooltipBackdrop("Blizzard Tooltip", 16, {1, 1, 1, 0})
 
 		--> enable bar animations and make the update speed faster
-		Details:SetUseAnimations (true)
-		--Details:SetWindowUpdateSpeed (0.3) -- 0.05 to 3.00
+		--Details:SetUseAnimations (true)
 
 		local function EmbedWindow (window, width, height, point, relativeFrame, relativePoint, ofsx, ofsy)
 			if not window then return end
@@ -406,22 +414,13 @@ if AS:CheckAddOn('Details') then
 			--> break the group or window 2 will mess with the setpoint
 			window:UngroupInstance()
 
-			--> set the skin to ElvUI
-			if (window.skin ~= "ElvUI Frame Style") then
-				window:ChangeSkin("ElvUI Frame Style")
+			--> set the skin to ElvUI if not using already
+			if (not window.skin:find("ElvUI") and not window.skin:find("Forced")) then
+				window:ChangeSkin("ElvUI Style II")
+				window:AttributeMenu(true, -19, 5, "ElvUI Font", 11)
+				window:SetBarTextSettings(10, "ElvUI Font")
+				window:ToolbarMenuSetButtons(true, true, true, true, true, false)
 			end
-
-			--> always show the player's bar even if he/she isn't in the top ranks (for example, the window is showing 1 to 7 players, the player is 12 place, so the window shows 1 to 6 and 12).
-			window:SetBarFollowPlayer(true)
-			--> set the font on the title bar to ElvUI font
-			window:AttributeMenu(true, -20, 5, "ElvUI Font", 11)
-			--> set the font on bars to elvui font
-			window:SetBarTextSettings(10, "ElvUI Font")
-			--> remove the close button
-			window:ToolbarMenuSetButtons(true, true, true, true, true, false)
-
-			--> resize the baseframe // -20 because this size doesn't count the title bar
-			window:SetSize(width, height - 20)
 
 			--> set the point and save the position
 			window:SetFrameStrata('LOW')
@@ -429,6 +428,39 @@ if AS:CheckAddOn('Details') then
 			window.baseframe:SetParent(relativeFrame)
 
 			ofsx = ofsx - 1 --> wasn't fitting correctly, with -1 it get aligned.
+			if (window.skin == "Forced Square") then
+				ofsx = ofsx - 1
+				if (window:GetId() == 2) then
+					window:SetSize(width+1, height - 20)
+				else
+					window:SetSize(width, height - 20)
+				end
+				
+			elseif (window.skin == "ElvUI Frame Style") then
+				if (window:GetId() == 2) then
+					window:SetSize(width-1, height - 20)
+				else
+					if NumberToEmbed == 1 then
+						window:SetSize(width-2, height - 20)
+					else
+						window:SetSize(width, height - 20)
+					end
+				end
+			
+			elseif (window.skin == "ElvUI Style II") then
+				if (window:GetId() == 2) then
+					window:SetSize(width, height - 20)
+				else
+					if NumberToEmbed == 1 then
+						window:SetSize(width-2, height - 20)
+					else
+						window:SetSize(width-1, height - 20)
+					end
+				end
+			else
+				window:SetSize(width, height - 20)
+			end
+			
 			window.baseframe:SetPoint(point, relativeFrame, relativePoint, ofsx, -offsety)
 			window:SaveMainWindowPosition()
 			window:RestoreMainWindowPosition()
@@ -452,6 +484,47 @@ if AS:CheckAddOn('Details') then
 
 			--> reload everything - when calling ChangeSkin without parameter, it uses the same skin and reaply all configs from the window's config table.
 			window:ChangeSkin()
+			
+			if (window.skin ~= "Forced Square") then
+				if (AS:CheckOption("DetailsBackdrop")) then
+					window:SetBackgroundAlpha (1)
+					window:ShowSideBars()
+				else
+					window:SetBackgroundAlpha (0)
+					window:HideSideBars()
+					
+					local skin = Details.skins [window.skin]
+					
+					window.row_info.space.left = skin.instance_cprops.row_info.space.left
+					window.row_info.space.right = skin.instance_cprops.row_info.space.right
+					
+					window:InstanceWallpaper (false)
+					
+					window:SetBarGrowDirection()
+				end
+			
+			elseif (window.skin == "Forced Square") then
+				if (AS:CheckOption("DetailsBackdrop")) then
+					window:ShowSideBars()
+					window:InstanceColor (1, 1, 1, 1, nil, true)
+					
+					local skin = Details.skins [window.skin]
+					window:SetBackgroundAlpha (skin.instance_cprops.bg_alpha)
+				else
+					window:HideSideBars()
+					window:InstanceColor (1, 1, 1, 0, nil, true)
+					
+					local skin = Details.skins [window.skin]
+					
+					window.row_info.space.left = skin.instance_cprops.row_info.space.left
+					window.row_info.space.right = skin.instance_cprops.row_info.space.right
+					
+					window:InstanceWallpaper (false)
+					window:SetBackgroundAlpha (0)
+					
+					window:SetBarGrowDirection()
+				end
+			end
 
 			--> check if the window is in current segment - segment 0 = current / -1 = overall / 1 - 25 = past segments
 			if (window:GetSegment() ~= 0) then
@@ -473,6 +546,7 @@ if AS:CheckAddOn('Details') then
 		elseif NumberToEmbed == 2 then
 			EmbedWindow(AS.DetailsInstances[1], EmbedSystem_LeftWindow:GetWidth(), EmbedSystem_LeftWindow:GetHeight(), 'TOPLEFT', EmbedSystem_LeftWindow, 'TOPLEFT', 2, 0)
 			EmbedWindow(AS.DetailsInstances[2], EmbedSystem_RightWindow:GetWidth(), EmbedSystem_RightWindow:GetHeight(), 'TOPRIGHT', EmbedSystem_RightWindow, 'TOPRIGHT', -2, 0)
+			
 		end
 		
 		--> internal events
@@ -484,7 +558,7 @@ if AS:CheckAddOn('Details') then
 			if (event == "DETAILS_INSTANCE_CLOSE") then
 				local instance = select (1, ...)
 				--> alert the used about closing an window embed: if the window is hidden from the UI because out of combat on ElvUI, it shows as opened under Details! Options panel.
-				if (instance._ElvUIEmbed) then
+				if (instance._ElvUIEmbed and _G.DetailsOptionsWindow and _G.DetailsOptionsWindow:IsShown()) then
 					Details:Msg("You just closed a window Embed on ElvUI, if wasn't intended click on Reopen.") --> need localization
 				end
 			elseif (event == "DETAILS_INSTANCE_OPEN") then
@@ -492,6 +566,15 @@ if AS:CheckAddOn('Details') then
 				if (instance._ElvUIEmbed) then
 					--> when a window is closed, it is removed from the window group, we need to add the window back to the group.
 					if (NumberToEmbed == 2) then
+						AS.DetailsInstances[1]:UngroupInstance()
+						AS.DetailsInstances[2]:UngroupInstance()
+						
+						AS.DetailsInstances[1].baseframe:ClearAllPoints()
+						AS.DetailsInstances[2].baseframe:ClearAllPoints()
+						
+						AS.DetailsInstances[1]:RestoreMainWindowPosition()
+						AS.DetailsInstances[2]:RestoreMainWindowPosition()
+
 						AS.DetailsInstances[2]:MakeInstanceGroup({1})
 					end
 				end

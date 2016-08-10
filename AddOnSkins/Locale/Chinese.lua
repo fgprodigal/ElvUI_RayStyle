@@ -20,6 +20,7 @@ function AS:UpdateLocale_zhCN()
 	ASL["DBM|VEM Font"] = "DBM|VEM Font"
 	ASL["DBM|VEM Font Size"] = "DBM|VEM Font Size"
 	ASL["DBM|VEM Font Flag"] = "DBM|VEM Font Flag"
+	ASL["DBM Transparent Radar"] = "DBM Transparent Radar"
 	ASL["None"] = "None"
 	ASL["OUTLINE"] = "OUTLINE"
 	ASL["THICKOUTLINE"] = "THICKOUTLINE"
@@ -68,4 +69,6 @@ function AS:UpdateLocale_zhCN()
 	ASL['Reset Settings'] = 'Reset Settings'
 	ASL["WeakAura Cooldowns"] = "WeakAura Cooldowns"
 	ASL["Embed into Right Chat Panel"] = "Embed into Right Chat Panel"
+	ASL["Parchment"] = "Parchment"
+	ASL["Enable Skin Debugging"] = "Enable Skin Debugging"
 end

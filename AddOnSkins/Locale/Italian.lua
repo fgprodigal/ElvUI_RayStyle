@@ -27,6 +27,7 @@ function AS:UpdateLocale_itIT()
 	ASL["MONOCHROME"] = "Monocromatico";
 	ASL["MONOCHROMEOUTLINE"] = "Monocromatico spesso";
 	ASL["DBM|VEM Half-bar Skin"] = "Mezza Barra DBM";
+	ASL["DBM Transparent Radar"] = "DBM Transparent Radar"
 	ASL["BigWigs Half-Bar"] = "Mezza Barra BigWigs";
 	ASL["Embed Settings"] = "Impostazioni di Integrazione"
 	ASL["Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Omen | Skada | Recount | TinyDPS"] = "Impostazioni per controllare l'integrazione degli AddOn:\n\nIntegrazioni Disponibili: alDamageMeter | Omen | Skada | Recount | TinyDPS";
@@ -70,4 +71,6 @@ function AS:UpdateLocale_itIT()
 	ASL['Reset Settings'] = 'Reset Settings'
 	ASL["WeakAura Cooldowns"] = "WeakAura Cooldowns"
 	ASL["Embed into Right Chat Panel"] = "Embed into Right Chat Panel"
+	ASL["Parchment"] = "Parchment"
+	ASL["Enable Skin Debugging"] = "Enable Skin Debugging"
 end

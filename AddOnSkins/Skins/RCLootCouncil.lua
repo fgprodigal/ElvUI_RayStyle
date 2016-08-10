@@ -3,8 +3,24 @@ local AS = unpack(AddOnSkins)
 if not AS:CheckAddOn('RCLootCouncil') then return end
 
 function AS:RCLootCouncil()
+	local RCSessionFrame = LibStub("AceAddon-3.0"):GetAddon("RCLootCouncil"):GetModule("RCSessionFrame")
+	hooksecurefunc(RCSessionFrame, "Show", function()
+		AS:SkinFrame(DefaultRCSessionSetupFrame, nil, nil, true)
+		AS:StripTextures(DefaultRCSessionSetupFrame.content, true)
+		AS:SkinCheckBox(DefaultRCSessionSetupFrameToggle)
+	end)
 
-	--MainFrame:SetScale(1)
+	local RCLootFrame = LibStub("AceAddon-3.0"):GetAddon("RCLootCouncil"):GetModule("RCLootFrame")
+	hooksecurefunc(RCLootFrame, "Show", function()
+		AS:SkinFrame(DefaultRCLootFrame.content, nil, nil, true)
+	end)
+
+	local RCVotingFrame = LibStub("AceAddon-3.0"):GetAddon("RCLootCouncil"):GetModule("RCVotingFrame")
+	hooksecurefunc(RCVotingFrame, "Show", function()
+		AS:SkinFrame(DefaultRCLootCouncilFrame.content, nil, nil, true)
+	end)
+
+--[[--MainFrame:SetScale(1)
 	AS:SkinFrame(MainFrame, 'Transparent', true)
 	AS:SkinFrame(ContentFrame, 'Default')
 	AS:SkinButton(BtClose)
@@ -49,6 +65,7 @@ function AS:RCLootCouncil()
 	AS:SkinButton(RaidButton)
 	AS:SkinButton(CloseButton)
 	AS:SkinScrollBar(RCVersionFrameContentFrameScrollBar)
+]]
 end
 
 AS:RegisterSkin('RCLootCouncil', AS.RCLootCouncil)

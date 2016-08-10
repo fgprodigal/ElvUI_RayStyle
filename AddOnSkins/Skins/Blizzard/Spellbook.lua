@@ -21,14 +21,24 @@ function AS:Blizzard_Spellbook()
 		Button.TextBackground:SetTexture(nil)
 		Button.TextBackground2:SetTexture(nil)
 		Button.IconTextureBg:SetTexture(nil)
+		Button:SetCheckedTexture(nil)
+		Button:SetPushedTexture(nil)
+		hooksecurefunc(Button, 'SetChecked', function(self, checked)
+			if checked then
+				self:SetBackdropBorderColor(1, 1, 0)
+			else
+				self:SetBackdropBorderColor(unpack(AS.BorderColor))
+			end
+		end)
 		_G["SpellButton"..i..'SlotFrame']:SetTexture(nil)
 		Button.UnlearnedFrame:SetTexture(nil)
 		Button.TrainFrame:SetTexture(nil)
 		Button.TrainTextBackground:SetTexture(nil)
 
 		AS:SkinFrame(Button, nil, true)
-		Button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
+		Button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.3)
 		Button:GetHighlightTexture():SetInside()
+		Button.cooldown:SetInside()
 		AS:SkinTexture(Icon)
 		Icon:SetInside()
 	end
@@ -42,24 +52,38 @@ function AS:Blizzard_Spellbook()
 			end
 			Button.SpellSubName:SetTextColor(0.6, 0.6, 0.6)
 			Button.RequiredLevelString:SetTextColor(0.6, 0.6, 0.6)
-			Button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
+			Button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.3)
 			Button:GetHighlightTexture():SetInside()
 		end
 	end)
 
 	-- Skill Line Tabs
-	for i = 1, MAX_SKILLLINE_TABS do
-		local Tab = _G["SpellBookSkillLineTab"..i]
-		_G["SpellBookSkillLineTab"..i.."Flash"]:Kill()
-		if Tab then
-			AS:SkinFrame(Tab)
-			AS:StyleButton(Tab)
-			Tab:GetNormalTexture():SetInside()
-			AS:SkinTexture(Tab:GetNormalTexture())
-			local point, relatedTo, point2, x, y = Tab:GetPoint()
-			Tab:Point(point, relatedTo, point2, 1, y)
+
+	hooksecurefunc('SpellBookFrame_UpdateSkillLineTabs', function()
+		local NumSkillLineTabs = GetNumSpellTabs();
+		for i = 1, MAX_SKILLLINE_TABS do
+			local Tab = _G["SpellBookSkillLineTab"..i]
+			if ( i <= NumSkillLineTabs and SpellBookFrame.bookType == BOOKTYPE_SPELL ) then
+				if Tab and not Tab.isSkinned then
+					AS:SkinFrame(Tab)
+					AS:StyleButton(Tab)
+
+					local Texture = select(2, GetSpellTabInfo(i))
+					Tab:SetNormalTexture(Texture)
+					if Tab:GetNormalTexture() then
+						Tab:GetNormalTexture():SetInside()
+						AS:SkinTexture(Tab:GetNormalTexture())
+					end
+
+					local point, relatedTo, point2, x, y = Tab:GetPoint()
+					Tab:Point(point, relatedTo, point2, 1, y)
+					Tab.isSkinned = true
+				end
+			end
 		end
-	end
+	end)
+
+	SpellBookFrame_UpdateSkillLineTabs()
 
 	-- Profession Tab
 	local ProfessionButtons = {
@@ -101,7 +125,7 @@ function AS:Blizzard_Spellbook()
 
 	hooksecurefunc('SpellBook_UpdateProfTab', function()
 		for _, Button in pairs(ProfessionButtons) do
-			Button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
+			Button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.3)
 			Button:GetHighlightTexture():SetInside()
 		end
 	end)
@@ -129,48 +153,6 @@ function AS:Blizzard_Spellbook()
 
 	SpellBookFrameTabButton1:ClearAllPoints()
 	SpellBookFrameTabButton1:Point("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", -5, 2)
-
-	hooksecurefunc("SpellBook_UpdateCoreAbilitiesTab", function()
-		for i = 1, #SpellBookCoreAbilitiesFrame.Abilities do
-			local button = SpellBookCoreAbilitiesFrame.Abilities[i]
-			if button and not button.isSkinned then
-				AS:SetTemplate(button)
-				button.EmptySlot:SetAlpha(0)
-				button.ActiveTexture:SetAlpha(0)
-				button.FutureTexture:SetAlpha(0)
-				AS:SkinTexture(button.iconTexture)
-				button.iconTexture:SetInside()
-				if button.FutureTexture:IsShown() then
-					button.iconTexture:SetDesaturated(true)
-					button.Name:SetTextColor(0.6, 0.6, 0.6)
-					button.InfoText:SetTextColor(0.6, 0.6, 0.6)
-					button.RequiredLevel:SetTextColor(0.6, 0.6, 0.6)
-				else
-					button.Name:SetTextColor(1, 0.82, 0)
-					button.InfoText:SetTextColor(0.8, 0.8, 0.8)
-					button.RequiredLevel:SetTextColor(0.8, 0.8, 0.8)
-				end
-				AS:StyleButton(button)
-				button.isSkinned = true
-			end
-		end
-		for i = 1, #SpellBookCoreAbilitiesFrame.SpecTabs do
-			local Tab = SpellBookCoreAbilitiesFrame.SpecTabs[i]
-			if Tab and not Tab.isSkinned then
-				AS:SkinFrame(Tab)
-				AS:StyleButton(Tab)
-				Tab:SetNormalTexture(select(4, GetSpecializationInfo(i)))
-				Tab:GetNormalTexture():SetInside()
-				AS:SkinTexture(Tab:GetNormalTexture())
-
-				if i == 1 then
-					Tab:SetPoint("TOPLEFT", SpellBookFrame, "TOPRIGHT", 1, 0)
-				end
-				
-				Tab.isSkinned = true
-			end
-		end
-	end)
 end
 
 AS:RegisterSkin('Blizzard_Spellbook', AS.Blizzard_Spellbook)

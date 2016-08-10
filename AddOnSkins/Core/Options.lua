@@ -26,12 +26,17 @@ local Defaults = {
 	['DBMFont'] = 'Tukui',
 	['DBMFontSize'] = 12,
 	['DBMFontFlag'] = 'OUTLINE',
+	['DBMRadarTrans'] = false,
 	['WeakAuraAuraBar'] = false,
 	['WeakAuraIconCooldown'] = false,
 	['SkinTemplate'] = 'Transparent',
 	['HideChatFrame'] = 'NONE',
 	['SkinDebug'] = false,
+	['LoginMsg'] = true,
+	['EmbedSystemMessage'] = true,
 }
+
+AddOnSkinsOptions = CopyTable(Defaults)
 
 local DEVELOPER_STRING = ""
 local LINE_BREAK = "\n"
@@ -56,6 +61,7 @@ local DEVELOPERS = {
 	"Kkthnx",
 	"Konungr",
 	"Lockslap",
+	"luminnas",
 	"lolarennt",
 	"MaXiMUS",
 	"Merith",
@@ -65,6 +71,7 @@ local DEVELOPERS = {
 	"Pezzer13",
 	"Rakkhin",
 	"Repooc",
+	"Roktaal",
 	"Shestak",
 	"Shadowcall",
 	"Sinaris",
@@ -158,11 +165,10 @@ function AS:GetOptions()
 						name = ASL["DBM|VEM Half-bar Skin"],
 						order = 4,
 					},
-					BigWigsHalfBar = {
+					DBMRadarTrans = {
 						type = "toggle",
-						name = ASL["BigWigs Half-Bar"],
-						order = 4,
-						disabled = function() return not AS:CheckOption("BigWigs", "BigWigs") end
+						name = ASL["DBM Transparent Radar"],
+						order = 5,
 					},
 				},
 			},
@@ -226,9 +232,14 @@ function AS:GetOptions()
 						name = ASL["Out of Combat (Hide)"],
 						order = 8,
 					},
+					EmbedSystemMessage = {
+						type = "toggle",
+						name = ASL["Enable the Embed System Message"],
+						order = 9,
+					},
 					EmbedOoCDelay = {
 						name = ASL["Embed OoC Delay"],
-						order = 9,
+						order = 10,
 						type = "range",
 						min = 1,
 						max = 30,
@@ -237,7 +248,7 @@ function AS:GetOptions()
 					},
 					HideChatFrame = {
 						name = ASL["Hide Chat Frame"],
-						order = 10,
+						order = 11,
 						type = "select",
 						values = AS:GetChatWindowInfo(),
 						disabled = function() return not (AS:CheckOption("EmbedSystemDual") or AS:CheckOption("EmbedSystem")) end,
@@ -245,52 +256,52 @@ function AS:GetOptions()
 					EmbedSexyCooldown = {
 						type = "toggle",
 						name = ASL["Attach SexyCD to action bar"],
-						order = 11,
+						order = 12,
 						disabled = function() return not AS:CheckOption("SexyCooldown", "SexyCooldown2") end,
 					},
 					EmbedCoolLine = {
 						type = "toggle",
 						name = ASL["Attach CoolLine to action bar"],
-						order = 12,
+						order = 13,
 						disabled = function() return not AS:CheckOption("CoolLine", "CoolLine") end,
 					},
 					EmbedRightChat = {
 						type = "toggle",
 						name = ASL["Embed into Right Chat Panel"],
-						order = 13,
+						order = 14,
 					},
 					TransparentEmbed = {
 						type = "toggle",
 						name = ASL["Embed Transparancy"],
-						order = 14,
+						order = 15,
 					},
 					EmbedBelowTop = {
 						type = "toggle",
 						name = ASL["Embed Below Top Tab"],
-						order = 15,
+						order = 16,
 					},
 					DetailsBackdrop = { 
 						type = "toggle", 
 						name = ASL["Details Backdrop"], 
-						order = 16, 
+						order = 17, 
 						disabled = function() return not (AS:CheckOption("Details", "Details") and AS:CheckEmbed("Details")) end 
 					},
 					RecountBackdrop = {
 						type = "toggle",
 						name = ASL["Recount Backdrop"],
-						order = 16,
+						order = 18,
 						disabled = function() return not (AS:CheckOption("Recount", "Recount") and AS:CheckEmbed("Recount")) end
 					},
 					SkadaBackdrop = {
 						type = "toggle",
 						name = ASL["Skada Backdrop"],
-						order = 17,
+						order = 19,
 						disabled = function() return not (AS:CheckOption("Skada", "Skada") and AS:CheckEmbed("Skada")) end
 					},
 					OmenBackdrop = {
 						type = "toggle",
 						name = ASL["Omen Backdrop"],
-						order = 18,
+						order = 20,
 						disabled = function() return not (AS:CheckOption("Omen", "Omen") and AS:CheckEmbed("Omen")) end
 					},
 				},
@@ -314,8 +325,23 @@ function AS:GetOptions()
 					WeakAuraAuraBar = {
 						type = "toggle",
 						name = ASL["WeakAura AuraBar"],
-						order = 2,
+						order = 1,
 						disabled = function() return not AS:CheckOption("WeakAuras", "WeakAuras") end,
+					},
+					Parchment = {
+						type = "toggle",
+						name = ASL["Parchment"],
+						order = 2,
+					},
+					SkinDebug = {
+						type = "toggle",
+						name = ASL["Enable Skin Debugging"],
+						order = 3,
+					},
+					LoginMsg = {
+						type = "toggle",
+						name = ASL["Enable the Login Message"],
+						order = 4,
 					},
 				},
 			},
@@ -422,10 +448,6 @@ function AS:GetOptions()
 			Options.args.addons.args[skinName] = GenerateOptionTable(skinName, order)
 			order = order + 1
 		end
-	end
-
-	if blizzorder == 0 then
-		Options.args.blizzard = nil
 	end
 
 	if IsAddOnLoaded("ElvUI") then
