@@ -22,7 +22,7 @@ ElvUF.Tags.Methods["RayStyle:healthcolor"] = function(unit)
 	local _, class = UnitClass(unit)
     local reaction = UnitReaction(unit, "player")
 
-    if (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
+    if UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
         return Hex(ElvUF.colors.tapped)
     elseif (UnitIsPlayer(unit)) then
         return Hex(ElvUF.colors.class[class])

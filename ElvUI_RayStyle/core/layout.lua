@@ -31,7 +31,6 @@ function RS:SetDataPanelTransparent()
 	RightChatToggleButton:SetBackdropColor(0, 0, 0, 0)
 	LeftMiniPanel:SetTemplate("Transparent")
 	RightMiniPanel:SetTemplate("Transparent")
-	ElvConfigToggle:SetTemplate("Transparent")
 end
 
 function RS:SetDataPanelStyle()

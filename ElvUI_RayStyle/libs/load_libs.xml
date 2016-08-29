@@ -1,3 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Include file="oUF_Plugins\oUF_Plugins.xml"/>
+    <Script file="LibItemUpgradeInfo-1.0\LibItemUpgradeInfo-1.0.lua"/>
 </Ui>

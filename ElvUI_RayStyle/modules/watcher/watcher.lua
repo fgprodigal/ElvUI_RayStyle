@@ -7,7 +7,7 @@ local E, L, V, P, G, _ = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, Pr
 local RW = E:NewModule("Watcher", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local colors = CUSTOM_CLASS_COLORS
+local colors = ElvUF["colors"].class
 RW.modules = {}
 
 local defaults = {}
@@ -157,10 +157,10 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 	if button.cooldown then
 		if filter:find("CD") then
 			button.cooldown:SetReverse(false)
-			CooldownFrame_SetTimer(button.cooldown, expires, duration, 1)
+			CooldownFrame_Set(button.cooldown, expires, duration, true, true)
 		else
 			button.cooldown:SetReverse(true)
-			CooldownFrame_SetTimer(button.cooldown, expires - duration, duration, 1)
+			CooldownFrame_Set(button.cooldown, expires - duration, duration, true, true)
 		end
 	end
 	if filter:find("CD") then

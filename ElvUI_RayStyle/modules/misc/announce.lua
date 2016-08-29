@@ -254,17 +254,17 @@ function RS:LoadMisc_Announce()
 		end
 	end)	  
 
-	SetCVar("fctCombatState", "1")
+	SetCVar("floatingCombatTextCombatState", "1")
 	local a = CreateFrame ("Frame")
 	a:RegisterEvent("PLAYER_REGEN_ENABLED")
 	a:RegisterEvent("PLAYER_REGEN_DISABLED")
 	a:RegisterEvent("PLAYER_ENTERING_WORLD")
 	a:SetScript("OnEvent", function (self,event)
 		if (UnitIsDead("player")) then return end
-		if event == "PLAYER_REGEN_ENABLED" and(COMBAT_TEXT_SHOW_COMBAT_STATE=="1") then
+		if event == "PLAYER_REGEN_ENABLED" then
 			-- allertrun("LEAVING COMBAT",0.1,1,0.1)
 			allertrun(LEAVING_COMBAT.." !",0.1,1,0.1)
-		elseif event == "PLAYER_REGEN_DISABLED" and(COMBAT_TEXT_SHOW_COMBAT_STATE=="1") then
+		elseif event == "PLAYER_REGEN_DISABLED" then
 			-- allertrun("ENTERING COMBAT",1,0.1,0.1)
 			allertrun(ENTERING_COMBAT.." !",1,0.1,0.1)
 		elseif event == "PLAYER_ENTERING_WORLD" then

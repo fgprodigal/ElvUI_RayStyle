@@ -18,10 +18,9 @@ local format = string.format
 
 local CURRENT_PAGE = 0
 local MAX_PAGE = 6
+local titleText = {}
 
 local function SetupChat()
-	RayStyleInstallStepComplete.message = L["Chat Set"]
-	RayStyleInstallStepComplete:Show()
 	local whisperFound
 	for i = 1, #CHAT_FRAMES do
 		local chatName, _, _, _, _, _, shown = FCF_GetChatWindowInfo(_G["ChatFrame"..i]:GetID())
@@ -93,12 +92,17 @@ local function SetupChat()
 			LeftChatToggleButton:Click()
 		end		
 	end
+
+	if RayStyleInstallStepComplete then
+		RayStyleInstallStepComplete.message = L["Chat Set"]
+		RayStyleInstallStepComplete:Show()
+		titleText[3].check:Show()
+	end
 end
 
 local function SetupCVars()
 	SetCVar("scriptErrors", 0)
 	SetCVar("buffDurations", 1)
-	SetCVar("consolidateBuffs", 0)
 	SetCVar("lootUnderMouse", 1)
 	SetCVar("autoSelfCast", 1)
 	SetCVar("nameplateShowFriends", 0)
@@ -107,7 +111,6 @@ local function SetupCVars()
 	SetCVar("nameplateShowFriendlyTotems", 0)
 	SetCVar("nameplateShowEnemies", 1)
 	SetCVar("nameplateShowEnemyPets", 1)
-	SetCVar("cameraDistanceMax", 50)
 	SetCVar("cameraDistanceMaxFactor", 4)
 	SetCVar("autoDismountFlying", 1)
 	SetCVar("autoQuestWatch", 1)
@@ -122,12 +125,17 @@ local function SetupCVars()
 	SetCVar("UnitNameGuildTitle", 1)
 	SetCVar("ActionButtonUseKeyDown", 1)
 	SetCVar("interactOnLeftClick", 0)
-		
-	RayStyleInstallStepComplete.message = L["CVars Set"]
-	RayStyleInstallStepComplete:Show()
+
+	if RayStyleInstallStepComplete then
+		RayStyleInstallStepComplete.message = L["CVars Set"]
+		RayStyleInstallStepComplete:Show()
+		titleText[2].check:Show()
+	end
 end
 
 function RS:SetupLayout(layout, noDataReset)
+	E:SetupTheme("classic", true)
+
 	if not noDataReset then
 		E:CopyTable(E.db.unitframe.units, P.unitframe.units)
 		E:CopyTable(E.db.actionbar, P.actionbar)
@@ -160,8 +168,8 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.general.autoAcceptInvite = true
 		E.db.general.hideErrorFrame = true
 		E.db.general.interruptAnnounce = "NONE"
-		E.db.general.minimap.icons.garrison.position = "BOTTOMLEFT"
-		E.db.general.minimap.icons.garrison.scale = 0.7
+		E.db.general.minimap.icons.classHall.position = "BOTTOMLEFT"
+		E.db.general.minimap.icons.classHall.scale = 0.7
 		
 		--chat
 		E.db.chat.font = "RayStyle Font"
@@ -174,27 +182,25 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.chat.timeStampFormat = "%H:%M "
 		
 		--nameplate
-		E.db.nameplate.font = "RayStyle Font"
-		E.db.nameplate.fontSize = 10
-		E.db.nameplate.fontOutline = "OUTLINE"
-		E.db.nameplate.reactions.tapped = {r = 0.6, g = 0.6, b = 0.6}
-		E.db.nameplate.reactions.friendlyNPC = {r = 0.31, g = 0.45, b = 0.63}
-		E.db.nameplate.reactions.friendlyPlayer = {r = 0.2,  g = 1, b = 0.2 }
-		E.db.nameplate.reactions.neutral = { r = 1, g = 1, b = 0.2 }
-		E.db.nameplate.reactions.enemy = { r = 1, g = 0.2, b = 0.2 }
-		E.db.nameplate.buffs.font = "RayStyle Font"
-		E.db.nameplate.buffs.fontSize = 10
-		E.db.nameplate.buffs.fontOutline = "OUTLINE"
-		E.db.nameplate.debuffs.font = "RayStyle Font"
-		E.db.nameplate.debuffs.fontSize = 10
-		E.db.nameplate.debuffs.fontOutline = "OUTLINE"
-		E.db.nameplate.threat.goodColor = { r = 0.2,  g = 1, b = 0.2 }
-		E.db.nameplate.threat.badColor = {r = 1, g = 0.2, b = 0.2}
-		E.db.nameplate.healthBar.text.enable = true
-		E.db.nameplate.healthBar.text.format = "PERCENT"
-		E.db.nameplate.castBar.height = 5
-		E.db.nameplate.castBar.color = { r = 0,g = 1,b = 0 }
-		E.db.nameplate.castBar.noInterrupt = { r = 1,g = 0,b = 0 }
+		E.db.nameplates.font = "RayStyle Font"
+		E.db.nameplates.fontSize = 12
+		E.db.nameplates.fontOutline = "OUTLINE"
+		E.db.nameplates.reactions.tapped = { r = 0.6, g = 0.6, b = 0.6 }
+		E.db.nameplates.reactions.good = { r = 0, g = 1, b = 0 }
+		E.db.nameplates.reactions.neutral = { r = 1, g = 1, b = 0 }
+		E.db.nameplates.reactions.bad = { r = 1, g = 0, b = 0 }
+		E.db.nameplates.castColor = { r = 0, g = 1, b = 0 }
+		E.db.nameplates.castNoInterruptColor = { r = 1, g = 0, b = 0 }
+		E.db.nameplates.units.FRIENDLY_PLAYER.healthbar.text.enable = true
+		E.db.nameplates.units.FRIENDLY_PLAYER.healthbar.text.format = "PERCENT"
+		E.db.nameplates.units.ENEMY_PLAYER.healthbar.text.enable = true
+		E.db.nameplates.units.ENEMY_PLAYER.healthbar.text.format = "PERCENT"
+		E.db.nameplates.units.FRIENDLY_NPC.healthbar.text.enable = true
+		E.db.nameplates.units.FRIENDLY_NPC.healthbar.text.format = "PERCENT"
+		E.db.nameplates.units.ENEMY_NPC.healthbar.text.enable = true
+		E.db.nameplates.units.ENEMY_NPC.healthbar.text.format = "PERCENT"
+		E.db.nameplates.threat.goodColor = { r = 0.2,  g = 1, b = 0.2 }
+		E.db.nameplates.threat.badColor = {r = 1, g = 0.2, b = 0.2}
 
 		--unitframe
 		E.db.unitframe.statusbar = "RayStyle Normal"
@@ -214,19 +220,9 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.colors.power.RAGE = { r = 1,g = 0,b = 0 }
 		E.db.unitframe.colors.power.FOCUS = { r = 1,g = .5,b = .25 }
 		E.db.unitframe.colors.power.ENERGY = { r = 1,g = 1,b = 0 }
-		E.db.unitframe.colors.classResources.DEATHKNIGHT = {
-			[1] = {r = 1, g = 0, b = 0},
-			[2] = {r = 0, g = 0.5, b = 0},
-			[3] = {r = 0, g = 1, b = 1},
-			[4] = {r = .9, g = .1, b = 1},	
-		}
+		E.db.unitframe.colors.classResources.DEATHKNIGHT = {r = 0, g = 1, b = 1}
 		E.db.unitframe.colors.classResources.PALADIN = {r = 1,g = 0.42,b = 0.62}
 		E.db.unitframe.colors.classResources.MAGE = {r = 0.2,g = 0.76,b = 1}
-		E.db.unitframe.colors.classResources.PRIEST = {r = 1,g = 1,b = 1}
-		E.db.unitframe.colors.classResources.DRUID = {
-			[1] = {r = 0, g = .4, b = 1},
-			[2] = {r = 1, g = .6,  b = 0},
-		}
 		E.db.unitframe.colors.classResources.MONK = {
 			[1] = { r = 0,	g = 1,	b = 0.59},
 			[2] = { r = 0,	g = 1,	b = 0.59},
@@ -235,19 +231,10 @@ function RS:SetupLayout(layout, noDataReset)
 			[5] = { r = 0,	g = 1,	b = 0.59},
 			[6] = { r = 0,	g = 1,	b = 0.59},
 		}
-		E.db.unitframe.colors.classResources.ROGUE = {
-			[1] = { r = 1,	g = 0,	b = 0},
-			[2] = { r = 1,	g = 0,	b = 0},
-			[3] = { r = 1,	g = 1,	b = 0},
-			[4] = { r = 1,	g = 1,	b = 0},
-			[5] = { r = 0,	g = 1,	b = 0},
-		}
 		E.db.unitframe.colors.classResources.comboPoints = {
 			[1] = { r = 1,	g = 0,	b = 0},
-			[2] = { r = 1,	g = 0,	b = 0},
-			[3] = { r = 1,	g = 1,	b = 0},
-			[4] = { r = 1,	g = 1,	b = 0},
-			[5] = { r = 0,	g = 1,	b = 0},
+			[2] = { r = 1,	g = 1,	b = 0},
+			[3] = { r = 0,	g = 1,	b = 0},
 		}
 		E.db.unitframe.colors.reaction = {
 			["BAD"] = { r = 1, g = 0.2, b = 0.2 },
@@ -290,9 +277,6 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.target.buffs.anchorPoint = "BOTTOMLEFT"
 		E.db.unitframe.units.target.buffs.perrow = 10
 		E.db.unitframe.units.target.buffs.attachTo = "FRAME"
-		E.db.unitframe.units.target.combobar.height = 7
-		E.db.unitframe.units.target.combobar.detachFromFrame = true
-		E.db.unitframe.units.target.combobar.detachedWidth = 220
 		E.db.unitframe.units.target.health.text_format = "[RayStyle:healthcolor][health:current-percent]"
 		E.db.unitframe.units.targettarget.height = 32
 		E.db.unitframe.units.targettarget.power.height = 3
@@ -356,9 +340,6 @@ function RS:SetupLayout(layout, noDataReset)
 		E.db.auras.countXOffset = 6
 		E.db.auras.timeYOffset = 7
 		E.db.auras.timeXOffset = 2
-		E.db.auras.consolidatedBuffs.font = "RayStyle Font"
-		E.db.auras.consolidatedBuffs.fontSize = 10
-		E.db.auras.consolidatedBuffs.fontOutline = "OUTLINE"
 
 		--datatexts
 		E.db.datatexts.font = "RayStyle Font"
@@ -414,6 +395,7 @@ function RS:SetupLayout(layout, noDataReset)
 		if RayStyleInstallStepComplete then
 			RayStyleInstallStepComplete.message = L["Layout Set"]
 			RayStyleInstallStepComplete:Show()
+			titleText[4].check:Show()
 		end
 	end
 
@@ -428,6 +410,7 @@ function RS:SetupAddon(addon)
 			RS:Print(L["DBM样式应用完成"])
 			RayStyleInstallStepComplete.message = L["DBM样式应用完成"]
 			RayStyleInstallStepComplete:Show()
+			titleText[5].check:Show()
 			DBT_PersistentOptions = {
 				["DBM"] = {
 					["HugeBarXOffset"] = 0,
@@ -475,14 +458,19 @@ function RS:SetupAddon(addon)
 			DBM_SavedOptions.MovieFilter = "AfterFirst"
 		else
 			RS:Print(L["插件DBM未启用"])
-			RayStyleInstallStepComplete.message = L["插件DBM未启用"]
-			RayStyleInstallStepComplete:Show()
+			if RayStyleInstallStepComplete then
+				RayStyleInstallStepComplete.message = L["插件DBM未启用"]
+				RayStyleInstallStepComplete:Show()
+			end
 		end
 	elseif addon == "Skada" then
 		if IsAddOnLoaded("Skada") then
 			RS:Print(L["Skada样式应用完成"])
-			RayStyleInstallStepComplete.message = L["Skada样式应用完成"]
-			RayStyleInstallStepComplete:Show()
+			if RayStyleInstallStepComplete then
+				RayStyleInstallStepComplete.message = L["Skada样式应用完成"]
+				RayStyleInstallStepComplete:Show()
+				titleText[5].check:Show()
+			end
 			SkadaDB["profiles"]["Default"] = {
 				["windows"] = {
 					{
@@ -520,8 +508,10 @@ function RS:SetupAddon(addon)
 			}
 		else
 			RS:Print(L["插件Skada未启用"])
-			RayStyleInstallStepComplete.message = L["插件Skada未启用"]
-			RayStyleInstallStepComplete:Show()
+			if RayStyleInstallStepComplete then
+				RayStyleInstallStepComplete.message = L["插件Skada未启用"]
+				RayStyleInstallStepComplete:Show()
+			end
 		end
 	end
 	if IsAddOnLoaded("AddOnSkins") then
@@ -594,6 +584,7 @@ local function SetPage(PageNum)
 		f.Desc1:SetText(L["这个安装向导将通过几个简单步骤引导你安装RayStyle样式的设置。"])
 		f.Desc2:SetText(format(L["此扩展美化包的选项设置可以在ElvUI控制台(/ec)的%s分类里找到。"], RS.title))
 		f.Desc3:SetText(L["请点击继续按钮。"])
+		titleText[1].text:SetText(titleText[1].text:GetText())
 		RayStyleInstallOption1Button:Show()
 		RayStyleInstallOption1Button:SetScript("OnClick", InstallComplete)
 		RayStyleInstallOption1Button:SetText(L["Skip Process"])
@@ -657,13 +648,27 @@ local function NextPage()
 	if CURRENT_PAGE ~= MAX_PAGE then
 		CURRENT_PAGE = CURRENT_PAGE + 1
 		SetPage(CURRENT_PAGE)
+		titleText[CURRENT_PAGE].text.anim.color:SetChange(1, 1, 0)
+		titleText[CURRENT_PAGE].text.anim:Play()
+		E:UIFrameFadeIn(titleText[CURRENT_PAGE].hoverTex, .3, 0, 1)
+		if CURRENT_PAGE > 1 then
+			E:UIFrameFadeIn(titleText[CURRENT_PAGE - 1].hoverTex, .3, 1, 0)
+			titleText[CURRENT_PAGE - 1].text.anim.color:SetChange(0, 0.68, 0.93)
+			titleText[CURRENT_PAGE - 1].text.anim:Play()
+		end
 	end
 end
 
 local function PreviousPage()
 	if CURRENT_PAGE ~= 1 then
+		E:UIFrameFadeIn(titleText[CURRENT_PAGE].hoverTex, .3, 1, 0)
+		titleText[CURRENT_PAGE].text.anim.color:SetChange(0, 0.68, 0.93)
+		titleText[CURRENT_PAGE].text.anim:Play()
 		CURRENT_PAGE = CURRENT_PAGE - 1
 		SetPage(CURRENT_PAGE)
+		E:UIFrameFadeIn(titleText[CURRENT_PAGE].hoverTex, .3, 0, 1)
+		titleText[CURRENT_PAGE].text.anim.color:SetChange(1, 1, 0)
+		titleText[CURRENT_PAGE].text.anim:Play()
 	end
 end
 
@@ -725,7 +730,7 @@ function RS:RunSetup()
 	if not RayStyleInstallFrame then
 		local f = CreateFrame("Button", "RayStyleInstallFrame", E.UIParent)
 		f.SetPage = SetPage
-		f:Size(650, 450)
+		f:Size(500, 400)
 		f:SetTemplate("Transparent")
 		f:SetPoint("CENTER")
 		f:SetFrameStrata("TOOLTIP")
@@ -733,7 +738,7 @@ function RS:RunSetup()
 		f.Title = f:CreateFontString(nil, "OVERLAY")
 		f.Title:FontTemplate(nil, 17, nil)
 		f.Title:Point("TOP", 0, -5)
-		f.Title:SetText(RS.title.." "..L["Installation"])
+		f.Title:SetText(L["ElvUI Installation"]:gsub("ElvUI", RS.title))
 		
 		f.Next = CreateFrame("Button", "RayStyleInstallNextButton", f, "UIPanelButtonTemplate")
 		f.Next:StripTextures()
@@ -842,8 +847,62 @@ function RS:RunSetup()
 			f:Hide()
 		end)		
 		E.Skins:HandleCloseButton(close)
+
+		f.side = CreateFrame('Frame', 'RayStyleTitleFrame', f)
+		f.side:SetTemplate('Transparent')
+		f.side:Size(140, 400)
+		
+		for i = 1, MAX_PAGE do
+			titleText[i] = CreateFrame('Frame', nil, f.side)
+			titleText[i]:Size(140, 20)
+			titleText[i].text = titleText[i]:CreateFontString(nil, 'OVERLAY')
+			titleText[i].text:SetPoint('LEFT', 27, 0)
+			titleText[i].text:FontTemplate(nil, 12)
+			titleText[i].text:SetTextColor(0, 0.68, 0.93)
+			titleText[i].text:SetJustifyV("MIDDLE")
+			
+			-- Create animation
+			titleText[i].text.anim = CreateAnimationGroup(titleText[i].text)
+			titleText[i].text.anim.color = titleText[i].text.anim:CreateAnimation("Color")
+			titleText[i].text.anim.color:SetColorType("Text")
+			
+			titleText[i].hoverTex = titleText[i]:CreateTexture(nil, 'OVERLAY')
+			titleText[i].hoverTex:SetTexture([[Interface\MONEYFRAME\Arrow-Right-Up]])
+			titleText[i].hoverTex:Size(14)
+			titleText[i].hoverTex:Point('RIGHT', titleText[i].text, 'LEFT', 4, -2)
+			titleText[i].hoverTex:SetAlpha(0)
+			titleText[i].check = titleText[i]:CreateTexture(nil, 'OVERLAY')
+			titleText[i].check:Size(20)
+			titleText[i].check:Point('LEFT', titleText[i].text, 'RIGHT', 0, -2)
+			titleText[i].check:SetTexture([[Interface\BUTTONS\UI-CheckBox-Check]])
+			titleText[i].check:Hide()
+
+			if i == 1 then titleText[i].text:SetFormattedText("%s", L['Welcome'])
+				elseif i == 2 then titleText[i].text:SetFormattedText("%s", L['CVars'])
+				elseif i == 3 then titleText[i].text:SetFormattedText("%s", L['Chat'])
+				elseif i == 4 then titleText[i].text:SetFormattedText("%s", L['Layout'])
+				elseif i == 5 then titleText[i].text:SetFormattedText("%s", L['插件'])
+				elseif i == 6 then titleText[i].text:SetFormattedText("%s", L['Installation Complete'])
+			end
+
+			if(i == 1) then
+				titleText[i]:Point('TOP', f.side, 'TOP', 0, -40)
+			else
+				titleText[i]:Point('TOP', titleText[i - 1], 'BOTTOM')
+			end
+		end
 	end
-	
+
+	-- Animations
+	RayStyleTitleFrame:Point('LEFT', 'RayStyleInstallFrame', 'LEFT', E.PixelMode and -1 or -3, 0)
+	local animGroup = CreateAnimationGroup(RayStyleTitleFrame)
+	local anim = animGroup:CreateAnimation("Move")
+	anim:SetOffset(-140, 0)
+	anim:SetDuration(0.5)
+	anim:SetSmoothing("out")
+	anim:Play()
+	E:UIFrameFadeIn(RayStyleTitleFrame, 0.5, 0, 1)
+
 	RayStyleInstallFrame:Show()
 	NextPage()
 end

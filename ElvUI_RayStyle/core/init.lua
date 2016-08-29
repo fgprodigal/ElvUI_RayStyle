@@ -11,7 +11,7 @@ local addon, ns = ...
 
 E.RS = {}
 RS.version = GetAddOnMetadata("ElvUI_RayStyle", "Version")
-RS.versionMinE = 7.0
+RS.versionMinE = 10
 RS.configs = {}
 RS.title = "|cff00b3ffRayStyle|r"
 

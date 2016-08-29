@@ -22,7 +22,7 @@ end
 hooksecurefunc(AB, "StyleButton", RS.StyleActionButton)
 
 local function SetupExtraButton()
-	local button = DraenorZoneAbilityFrame.SpellButton
+	local button = ZoneAbilityFrame.SpellButton
 	if button then
 		button.NormalTexture:Kill()
 		button.Style:SetDrawLayer("BACKGROUND")

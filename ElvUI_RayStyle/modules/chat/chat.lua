@@ -36,12 +36,12 @@ function RS:FaneifyTab(frame)
 	end
 end
 
-local function StyleGlowTab(self, event, ...)
-	if self.glow:IsShown() then
-		updateFS(self, 1, 0, 0)
-	end
-end
-hooksecurefunc(CH, "ChatTab_OnUpdate", StyleGlowTab)
+-- local function StyleGlowTab(self, event, ...)
+	-- if self.glow:IsShown() then
+		-- updateFS(self, 1, 0, 0)
+	-- end
+-- end
+-- hooksecurefunc(CH, "ChatTab_OnUpdate", StyleGlowTab)
 
 local function StyleTabText(self, frame)
 	local name = frame:GetName()

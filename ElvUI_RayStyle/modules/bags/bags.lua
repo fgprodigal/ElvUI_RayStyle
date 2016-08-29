@@ -8,37 +8,6 @@ local B = E:GetModule("Bags")
 local RS = E:GetModule("RayStyle")
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local armor = GetAuctionItemClasses()
-local weapon = select(2,GetAuctionItemClasses())
-
-local function UpdateSlot(self, bagID, slotID)
-	if (self.Bags[bagID] and self.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not self.Bags[bagID] or not self.Bags[bagID][slotID] then		
-		return
-	end
-	local slot, _ = self.Bags[bagID][slotID], nil
-	local clink = GetContainerItemLink(bagID, slotID)
-
-	if not slot.ilvl then
-		slot.ilvl = slot:CreateFontString(nil, "OVERLAY")
-		slot.ilvl:FontTemplate(nil, 11, "THINOUTLINE")
-		slot.ilvl:SetPoint("TOPLEFT", 0, 0)
-		slot.ilvl:SetShadowColor(0, 0)
-		slot.ilvl:SetShadowOffset(1, -1)
-	end
-
-	slot.ilvl:SetText("")
-
-	if clink then
-		local _, _, _, _, _, itemType = GetItemInfo(clink)
-		local itemLevel = RS:GetItemUpgradeLevel(clink)
-		if itemType == armor or itemType == weapon and itemLevel > 1 then
-			slot.ilvl:SetTextColor(RS:GetItemLevelColor(RS:GetItemUpgradeLevel(clink)))
-			slot.ilvl:SetText(itemLevel)
-		end
-	end
-end
-hooksecurefunc(B, "UpdateSlot", UpdateSlot)
-
 local slots = {"BackSlot", "ChestSlot", "FeetSlot", "Finger0Slot", "Finger1Slot", "HandsSlot", "HeadSlot", "LegsSlot", "MainHandSlot", "NeckSlot", "SecondaryHandSlot", "ShoulderSlot", "Trinket0Slot", "Trinket1Slot", "WaistSlot", "WristSlot"}
 local function UpdateCharacterSlot(unit)
 	for _, slot in pairs(slots) do

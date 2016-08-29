@@ -6,66 +6,16 @@
 local E, L, V, P, G, _ = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 local RS = E:GetModule("RayStyle")
 local LSM = LibStub("LibSharedMedia-3.0")
+local LibItemUpgrade = LibStub("LibItemUpgradeInfo-1.0")
 
 local format = string.format
 
 RS["media"] = {}
+RS.TexCoords = {.08, 0.92, -.04, 0.92}
 
 function RS.dummy()
 	return
 end
-
-local ItemUpgrade = setmetatable ({
-	[1]   =  8, -- 1/1
-	[373] =  4, -- 1/2
-	[374] =  8, -- 2/2
-	[375] =  4, -- 1/3
-	[376] =  4, -- 2/3
-	[377] =  4, -- 3/3
-	[378] =  7, -- 1/1
-	[379] =  4, -- 1/2
-	[380] =  4, -- 2/2
-	[445] =  0, -- 0/2
-	[446] =  4, -- 1/2
-	[447] =  8, -- 2/2
-	[451] =  0, -- 0/1
-	[452] =  8, -- 1/1
-	[453] =  0, -- 0/2
-	[454] =  4, -- 1/2
-	[455] =  8, -- 2/2
-	[456] =  0, -- 0/1
-	[457] =  8, -- 1/1
-	[458] =  0, -- 0/4
-	[459] =  4, -- 1/4
-	[460] =  8, -- 2/4
-	[461] = 12, -- 3/4
-	[462] = 16, -- 4/4
-	[465] =  0, -- 0/2
-	[466] =  4, -- 1/2
-	[467] =  8, -- 2/2
-	[468] =  0, -- 0/4
-	[469] =  4, -- 1/4
-	[470] =  8, -- 2/4
-	[471] = 12, -- 3/4
-	[472] = 16, -- 4/4
-	[476] =  0, -- 0/2
-	[477] =  4, -- 1/2
-	[478] =  8, -- 2/2
-	[479] =  0, -- 0/1
-	[480] =  8, -- 1/1
-	[491] =  0, -- 0/2
-	[492] =  4, -- 1/2
-	[493] =  8, -- 2/2
-	[494] =  0, -- 0/4
-	[495] =  4, -- 1/4
-	[496] =  8, -- 2/4
-	[497] = 12, -- 3/4
-	[498] = 16, -- 4/4
-	[504] = 12, -- thanks Dridzt
-	[505] = 16,
-	[506] = 20,
-	[507] = 24,
-},{__index=function() return 0 end})
 
 function RS:Print(msg)
 	print("|cff00b3ffRayStyle:|r", msg)
@@ -106,10 +56,7 @@ function RS:GetItemUpgradeLevel(iLink)
 	if not iLink then
 		return 0
 	else
-		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-		local code = string.match(iLink, ":(%d+):%d:%d|h")
-		if not itemLevel then return 0 end
-		return itemLevel + ItemUpgrade[tonumber(code)]
+		return LibItemUpgrade:GetUpgradedItemLevel(iLink)
 	end
 end
 

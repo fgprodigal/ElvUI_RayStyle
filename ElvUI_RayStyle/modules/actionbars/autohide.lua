@@ -70,7 +70,7 @@ local function FixActionButtonCooldown(button)
 		start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
 	end
 	if start then
-		CooldownFrame_SetTimer(cooldown, start, duration, enable, charges, maxCharges)
+		CooldownFrame_Set(cooldown, start, duration, enable, charges, maxCharges)
 	end
 end
 

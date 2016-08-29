@@ -24,10 +24,10 @@ local function UpdateUFColors()
 end
 UpdateUFColors()
 
-CUSTOM_CLASS_COLORS = {}
-for class, color in pairs(ElvUF["colors"].class) do
-	CUSTOM_CLASS_COLORS[class] = { r = color[1], g = color[2], b = color[3] }
-end
+-- CUSTOM_CLASS_COLORS = {}
+-- for class, color in pairs(ElvUF["colors"].class) do
+	-- CUSTOM_CLASS_COLORS[class] = { r = color[1], g = color[2], b = color[3] }
+-- end
 
 E.TimeColors = {
 	[0] = NORMAL_FONT_COLOR_CODE,
